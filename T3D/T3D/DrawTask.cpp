@@ -26,19 +26,70 @@ namespace T3D {
 
 	void DrawTask::init(){		
 		drawArea->clear(Colour(255,255,255,255));
-		drawDDALine(100,100,200,200,Colour(0,0,0,255));
+		drawBresLine(400, 300, 400+100, 300, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400+100, 300+50, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400+100, 300+100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400+50, 300 + 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400, 300 + 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400-50, 300 + 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400-100, 300 + 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 - 100, 300 + 50, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 - 100, 300, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 - 100, 300 - 50, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 - 100, 300 - 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 - 50, 300 - 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400, 300 - 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 + 50, 300 - 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 + 100, 300 - 100, Colour(0, 0, 0, 255));
+		drawBresLine(400, 300, 400 + 100, 300 - 50, Colour(0, 0, 0, 255));
 	}
 
 	void DrawTask::drawDDALine(int x1, int y1, int x2, int y2,Colour c){
 		float ystep = float(y2-y1)/(x2-x1);
-		float y = y1;
-		for (int x = x1; x<x2; x++){
-			drawArea->plotPixel(x,int(y),c);
-			y += ystep;
+		if (abs(ystep) <= 1.0) {
+			if (x2 < x1) {
+				swap(x1, x2);
+				swap(y1, y2);
+			}
+			float y = y1;
+			for (int x = x1; x < x2; x++) {
+				drawArea->plotPixel(x, int(y), c);
+				y += ystep;
+			}
+		} else {
+			float xstep = 1.0 / ystep;
+			if (y2 < y1) {
+				swap(x1, x2);
+				swap(y1, y2);
+			}
+			float x = x1;
+			for (int y = y1; y < y2; y++) {
+				drawArea->plotPixel(x, int(y), c);
+				x += xstep;
+			}
 		}
 	}
 		
 	void DrawTask::drawBresLine(int x1, int y1, int x2, int y2,Colour c){
+		int dy = y2 - y1;
+		int dx = x2 - x1;
+		if (dy <= 0 || dx <= 0) {
+			return;
+		}
+		int err = 0;
+		int x = x1;
+		int y = y1;
+		while (x < x2) {
+			drawArea->plotPixel(x, int(y), c);
+			if (err > dx) {
+				y++;
+				err -= dx;
+			}
+			else {
+				x++;
+				err += dy;
+			}
+		}
 	}
 
 	void DrawTask::update(float dt){
