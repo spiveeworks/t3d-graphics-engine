@@ -26,7 +26,7 @@ namespace T3D {
 
 	void DrawTask::init(){		
 		drawArea->clear(Colour(255,255,255,255));
-		drawCircleTrig(400, 300, 100.0, Colour(0, 0, 0, 255));
+		drawCirclePythag(400, 300, 100, Colour(0, 0, 0, 255));
 	}
 
 	void DrawTask::drawDDALine(int x1, int y1, int x2, int y2,Colour c){
@@ -111,6 +111,22 @@ namespace T3D {
 		for (float theta = 0.0; theta < 3.1415926535 / 4.0; theta += dtheta) {
 			int dx = int(r * cosf(theta));
 			int dy = int(r * sinf(theta));
+			drawArea->plotPixel(x0 + dx, y0 + dy, c);
+			drawArea->plotPixel(x0 + dy, y0 + dx, c);
+			drawArea->plotPixel(x0 + dx, y0 - dy, c);
+			drawArea->plotPixel(x0 + dy, y0 - dx, c);
+			drawArea->plotPixel(x0 - dx, y0 + dy, c);
+			drawArea->plotPixel(x0 - dy, y0 + dx, c);
+			drawArea->plotPixel(x0 - dx, y0 - dy, c);
+			drawArea->plotPixel(x0 - dy, y0 - dx, c);
+		}
+	}
+
+	void DrawTask::drawCirclePythag(int x0, int y0, int r, Colour c) {
+		float dtheta = 1.0 / r;
+		int dy = r;
+		for (int dx = 0; dx < dy; dx++) {
+			dy = int(sqrt(r*r-dx*dx));
 			drawArea->plotPixel(x0 + dx, y0 + dy, c);
 			drawArea->plotPixel(x0 + dy, y0 + dx, c);
 			drawArea->plotPixel(x0 + dx, y0 - dy, c);
