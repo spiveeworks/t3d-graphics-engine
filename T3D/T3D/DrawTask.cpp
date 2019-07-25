@@ -71,23 +71,52 @@ namespace T3D {
 	}
 		
 	void DrawTask::drawBresLine(int x1, int y1, int x2, int y2,Colour c){
-		int dy = y2 - y1;
 		int dx = x2 - x1;
-		if (dy <= 0 || dx <= 0) {
-			return;
-		}
-		int err = 0;
-		int x = x1;
-		int y = y1;
-		while (x < x2) {
-			drawArea->plotPixel(x, int(y), c);
-			if (err > dx) {
-				y++;
-				err -= dx;
+		int dy = y2 - y1;
+		if (abs(dx) >= abs(dy)) {
+			if (x2 < x1) {
+				swap(x1, x2);
+				dx *= -1;
+				swap(y1, y2);
+				dy *= -1;
 			}
-			else {
-				x++;
+			int sy = 1;
+			if (dy < 0) {
+				sy = -1;
+				dy *= -1;
+			}
+			int y = y1;
+			int err = dx / 2;
+			for (int x = x1; x < x2; x++) {
+				drawArea->plotPixel(x, y, c);
 				err += dy;
+				if (err > dx) {
+					y += sy;
+					err -= dx;
+				}
+			}
+		}
+		else {
+			if (y2 < y1) {
+				swap(x1, x2);
+				dx *= -1;
+				swap(y1, y2);
+				dy *= -1;
+			}
+			int sx = 1;
+			if (dx < 0) {
+				sx = -1;
+				dx *= -1;
+			}
+			int x = x1;
+			int err = dy / 2;
+			for (int y = y1; y < y2; y++) {
+				drawArea->plotPixel(x, y, c);
+				err += dx;
+				if (err > dy) {
+					x += sx;
+					err -= dy;
+				}
 			}
 		}
 	}
