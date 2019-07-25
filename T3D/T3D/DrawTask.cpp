@@ -108,8 +108,17 @@ namespace T3D {
 
 	void DrawTask::drawCircleTrig(int x0, int y0, float r, Colour c) {
 		float dtheta = 1.0 / r;
-		for (float theta = 0.0; theta < 2 * 3.1415926535; theta += dtheta) {
-			drawArea->plotPixel(x0 + int(r * cosf(theta)), y0 + int(r * sinf(theta)), c);
+		for (float theta = 0.0; theta < 3.1415926535 / 4.0; theta += dtheta) {
+			int dx = int(r * cosf(theta));
+			int dy = int(r * sinf(theta));
+			drawArea->plotPixel(x0 + dx, y0 + dy, c);
+			drawArea->plotPixel(x0 + dy, y0 + dx, c);
+			drawArea->plotPixel(x0 + dx, y0 - dy, c);
+			drawArea->plotPixel(x0 + dy, y0 - dx, c);
+			drawArea->plotPixel(x0 - dx, y0 + dy, c);
+			drawArea->plotPixel(x0 - dy, y0 + dx, c);
+			drawArea->plotPixel(x0 - dx, y0 - dy, c);
+			drawArea->plotPixel(x0 - dy, y0 - dx, c);
 		}
 	}
 
