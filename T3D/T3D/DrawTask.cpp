@@ -26,22 +26,7 @@ namespace T3D {
 
 	void DrawTask::init(){		
 		drawArea->clear(Colour(255,255,255,255));
-		drawBresLine(400, 300, 400+100, 300, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400+100, 300+50, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400+100, 300+100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400+50, 300 + 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400, 300 + 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400-50, 300 + 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400-100, 300 + 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 - 100, 300 + 50, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 - 100, 300, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 - 100, 300 - 50, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 - 100, 300 - 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 - 50, 300 - 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400, 300 - 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 + 50, 300 - 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 + 100, 300 - 100, Colour(0, 0, 0, 255));
-		drawBresLine(400, 300, 400 + 100, 300 - 50, Colour(0, 0, 0, 255));
+		drawCircleTrig(400, 300, 100.0, Colour(0, 0, 0, 255));
 	}
 
 	void DrawTask::drawDDALine(int x1, int y1, int x2, int y2,Colour c){
@@ -118,6 +103,13 @@ namespace T3D {
 					err -= dy;
 				}
 			}
+		}
+	}
+
+	void DrawTask::drawCircleTrig(int x0, int y0, float r, Colour c) {
+		float dtheta = 1.0 / r;
+		for (float theta = 0.0; theta < 2 * 3.1415926535; theta += dtheta) {
+			drawArea->plotPixel(x0 + int(r * cosf(theta)), y0 + int(r * sinf(theta)), c);
 		}
 	}
 

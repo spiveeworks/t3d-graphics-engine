@@ -25,6 +25,7 @@ namespace T3D{
 		void init();
 		void drawDDALine(int x1, int y1, int x2, int y2, Colour c);
 		void drawBresLine(int x1, int y1, int x2, int y2, Colour c);
+		void drawCircleTrig(int x0, int y0, float r, Colour c);
 
 		virtual void update(float dt);
 
