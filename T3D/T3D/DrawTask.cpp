@@ -23,6 +23,10 @@ namespace T3D {
 		poly[3] = Vector3(-1.0f, 0.0f, 1.0f);
 		poly[4] = Vector3(-0.5f, -triheight, 1.0f);
 		poly[5] = Vector3(0.5f, -triheight, 1.0f);
+		Matrix3x3 scale = Matrix3x3(100.0f, 0.0f, 0.0f, 0.0f, 100.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		Matrix3x3 translate = Matrix3x3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
+		translate.SetColumn(2, Vector3(400.0f, 300.0f, 1.0f));
+		animation = translate * scale;
 		init();
 	}
 
@@ -36,11 +40,9 @@ namespace T3D {
 		float scale = 100.0f;
 		Vector3 centre = Vector3(400.0f, 300.0f, 1.0f);
 
-		Vector3 p1 = centre + scale * poly[5];
-		p1.z = 1.0f;  // just homogeneous things
+		Vector3 p1 = animation * poly[5];
 		for (int i = 0; i < 6; i++) {
-			Vector3 p2 = centre + scale * poly[i];
-			p2.z = 1.0f;
+			Vector3 p2 = animation * poly[i];
 			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(0, 0, 0, 255));
 			p1 = p2;
 		}
