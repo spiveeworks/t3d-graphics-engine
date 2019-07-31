@@ -23,11 +23,22 @@ namespace T3D {
 		poly[3] = Vector3(-1.0f, 0.0f, 1.0f);
 		poly[4] = Vector3(-0.5f, -triheight, 1.0f);
 		poly[5] = Vector3(0.5f, -triheight, 1.0f);
-		Matrix3x3 scale = Matrix3x3(100.0f, 0.0f, 0.0f, 0.0f, 100.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-		Matrix3x3 translate = Matrix3x3(1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-		translate.SetColumn(2, Vector3(400.0f, 300.0f, 1.0f));
+		Matrix3x3 scale = Matrix3x3(
+			100.0f, 0.0f, 0.0f,
+			0.0f, 100.0f, 0.0f,
+			0.0f, 0.0f, 1.0f
+		);
+		Matrix3x3 translate = Matrix3x3(
+			1.0f, 0.0f, 400.0f,
+			0.0f, 1.0f, 300.0f,
+			0.0f, 0.0f, 1.0f
+		);
 		float theta = 3.141592f * 0.1f;
-		Matrix3x3 rotate = Matrix3x3(cosf(theta), -sinf(theta), 0.0f, sinf(theta), cosf(theta), 0.0f, 0.0f, 0.0f, 1.0f);
+		Matrix3x3 rotate = Matrix3x3(
+			cosf(theta), -sinf(theta), 0.0f,
+			sinf(theta), cosf(theta), 0.0f,
+			0.0f, 0.0f, 1.0f
+		);
 		animationNoRot = translate * scale;
 		animationRot = animationNoRot * rotate;
 		init();
