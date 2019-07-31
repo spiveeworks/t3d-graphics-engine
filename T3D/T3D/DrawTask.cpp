@@ -16,6 +16,13 @@ namespace T3D {
 	DrawTask::DrawTask(T3DApplication *app, Texture* tex) : Task(app)
 	{
 		drawArea = tex;
+		float triheight = sqrtf(1.0f * 1.0f - 0.5f * 0.5f);
+		poly[0] = Vector3(1.0f, 0.0f, 1.0f);
+		poly[1] = Vector3(0.5f, triheight, 1.0f);
+		poly[2] = Vector3(-0.5f, triheight, 1.0f);
+		poly[3] = Vector3(-1.0f, 0.0f, 1.0f);
+		poly[4] = Vector3(-0.5f, -triheight, 1.0f);
+		poly[5] = Vector3(0.5f, -triheight, 1.0f);
 		init();
 	}
 
@@ -26,7 +33,17 @@ namespace T3D {
 
 	void DrawTask::init(){		
 		drawArea->clear(Colour(255,255,255,255));
-		drawCircleBres(400, 300, 100, Colour(0, 0, 0, 255));
+		float scale = 100.0f;
+		Vector3 centre = Vector3(400.0f, 300.0f, 1.0f);
+
+		Vector3 p1 = centre + scale * poly[5];
+		p1.z = 1.0f;  // just homogeneous things
+		for (int i = 0; i < 6; i++) {
+			Vector3 p2 = centre + scale * poly[i];
+			p2.z = 1.0f;
+			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(0, 0, 0, 255));
+			p1 = p2;
+		}
 	}
 
 	void DrawTask::drawDDALine(int x1, int y1, int x2, int y2,Colour c){

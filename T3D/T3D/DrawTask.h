@@ -33,6 +33,7 @@ namespace T3D{
 
 	private:
 		Texture *drawArea;
+		Vector3 poly[6];
 	};
 
 }
