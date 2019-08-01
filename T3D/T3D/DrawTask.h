@@ -34,7 +34,8 @@ namespace T3D{
 	private:
 		Texture *drawArea;
 		Vector3 poly[6];
-		Matrix3x3 animationNoRot, animationRot;
+		Matrix3x3 animationNoRot;
+		float theta;
 	};
 
 }

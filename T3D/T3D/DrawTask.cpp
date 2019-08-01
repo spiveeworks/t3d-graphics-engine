@@ -33,14 +33,8 @@ namespace T3D {
 			0.0f, 1.0f, 300.0f,
 			0.0f, 0.0f, 1.0f
 		);
-		float theta = 3.141592f * 0.1f;
-		Matrix3x3 rotate = Matrix3x3(
-			cosf(theta), -sinf(theta), 0.0f,
-			sinf(theta), cosf(theta), 0.0f,
-			0.0f, 0.0f, 1.0f
-		);
+		theta = 0.0f;
 		animationNoRot = translate * scale;
-		animationRot = animationNoRot * rotate;
 		init();
 	}
 
@@ -50,26 +44,6 @@ namespace T3D {
 	}
 
 	void DrawTask::init(){		
-		drawArea->clear(Colour(255,255,255,255));
-		float scale = 100.0f;
-		Vector3 centre = Vector3(400.0f, 300.0f, 1.0f);
-
-		{
-			Vector3 p1 = animationNoRot * poly[5];
-			for (int i = 0; i < 6; i++) {
-				Vector3 p2 = animationNoRot * poly[i];
-				drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(0, 0, 0, 255));
-				p1 = p2;
-			}
-		}
-		{
-			Vector3 p1 = animationRot * poly[5];
-			for (int i = 0; i < 6; i++) {
-				Vector3 p2 = animationRot * poly[i];
-				drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(255, 0, 0, 255));
-				p1 = p2;
-			}
-		}
 	}
 
 	void DrawTask::drawDDALine(int x1, int y1, int x2, int y2,Colour c){
@@ -200,7 +174,22 @@ namespace T3D {
 	}
 
 	void DrawTask::update(float dt){
-		//drawArea->clear(Colour(255,255,255,255));
+		drawArea->clear(Colour(255, 255, 255, 255));
+
+		theta += dt;
+		Matrix3x3 rotate = Matrix3x3(
+			cosf(theta), -sinf(theta), 0.0f,
+			sinf(theta), cosf(theta), 0.0f,
+			0.0f, 0.0f, 1.0f
+		);
+		Matrix3x3 animationRot = animationNoRot * rotate;
+
+		Vector3 p1 = animationRot * poly[5];
+		for (int i = 0; i < 6; i++) {
+			Vector3 p2 = animationRot * poly[i];
+			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(255, 0, 0, 255));
+			p1 = p2;
+		}
 
 		app->getRenderer()->reloadTexture(drawArea);
 	}
