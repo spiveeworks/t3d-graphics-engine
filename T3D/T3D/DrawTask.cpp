@@ -23,18 +23,8 @@ namespace T3D {
 		poly[3] = Vector3(-1.0f, 0.0f, 1.0f);
 		poly[4] = Vector3(-0.5f, -triheight, 1.0f);
 		poly[5] = Vector3(0.5f, -triheight, 1.0f);
-		Matrix3x3 scale = Matrix3x3(
-			100.0f, 0.0f, 0.0f,
-			0.0f, 100.0f, 0.0f,
-			0.0f, 0.0f, 1.0f
-		);
-		Matrix3x3 translate = Matrix3x3(
-			1.0f, 0.0f, 400.0f,
-			0.0f, 1.0f, 300.0f,
-			0.0f, 0.0f, 1.0f
-		);
-		theta = 0.0f;
-		animationNoRot = translate * scale;
+		scale = 100.0f;
+		time = 0.0f;
 		init();
 	}
 
@@ -176,17 +166,28 @@ namespace T3D {
 	void DrawTask::update(float dt){
 		drawArea->clear(Colour(255, 255, 255, 255));
 
-		theta += dt;
-		Matrix3x3 rotate = Matrix3x3(
-			cosf(theta), -sinf(theta), 0.0f,
-			sinf(theta), cosf(theta), 0.0f,
+		time += dt;
+		float rotate = time;
+		Matrix3x3 rotateMat = Matrix3x3(
+			cosf(rotate), -sinf(rotate), 0.0f,
+			sinf(rotate), cosf(rotate), 0.0f,
 			0.0f, 0.0f, 1.0f
 		);
-		Matrix3x3 animationRot = animationNoRot * rotate;
+		Matrix3x3 scaleMat = Matrix3x3(
+			100.0f, 0.0f, 0.0f,
+			0.0f, 100.0f, 0.0f,
+			0.0f, 0.0f, 1.0f
+		);
+		Matrix3x3 translateMat = Matrix3x3(
+			1.0f, 0.0f, 450.0 + 200 * cosf(time),
+			0.0f, 1.0f, 300.0f + 100 * sinf(2*time),
+			0.0f, 0.0f, 1.0f
+		);
+		Matrix3x3 animation = translateMat * scaleMat * rotateMat;
 
-		Vector3 p1 = animationRot * poly[5];
+		Vector3 p1 = animation * poly[5];
 		for (int i = 0; i < 6; i++) {
-			Vector3 p2 = animationRot * poly[i];
+			Vector3 p2 = animation * poly[i];
 			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(255, 0, 0, 255));
 			p1 = p2;
 		}

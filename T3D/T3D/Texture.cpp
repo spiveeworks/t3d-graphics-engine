@@ -140,7 +140,7 @@ namespace T3D
 	}
 
 	void Texture::plotPixel(int x, int y, Colour c){
-		
+		if (!(0 <= x && x < image->w && 0 <= y && y < image->h)) return;
 		if( SDL_MUSTLOCK(image) )
 			SDL_LockSurface(image);
 
