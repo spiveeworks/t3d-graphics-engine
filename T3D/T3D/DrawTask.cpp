@@ -18,7 +18,7 @@ namespace T3D {
 		drawArea = tex;
 		float triheight = sqrtf(1.0f * 1.0f - 0.5f * 0.5f);
 		poly = {
-			Vector3(1.0f, 0.0f, 1.0f),
+			Vector3(0.0f, 0.0f, 1.0f),
 			Vector3(0.5f, triheight, 1.0f),
 			Vector3(-0.5f, triheight, 1.0f),
 			Vector3(-1.0f, 0.0f, 1.0f),
@@ -176,8 +176,22 @@ namespace T3D {
 		}
 	}
 
-	void DrawTask::drawPie(int cx, int cy, int r, float theta) {
+	void DrawTask::plotHoriz(int xl, int xr, int y, Colour c) {
+		for (int x = xl; x <= xr; x++) {
+			drawArea->plotPixel(x, y, c);
+		}
+	}
 
+	void DrawTask::drawPie(int cx, int cy, int r, float theta) {
+		float slope = tanf(theta);
+		int dy = r;
+		for (int dx = 0; dx < dy; dx++) {
+			if (dx*dx + dy * dy > r*r) {
+				dy -= 1;
+			}
+			plotHoriz(cx - dx, cx - slope * dy, cy + dy, Colour(0, 0, 0, 255));
+			plotHoriz(cx - dy, cx - slope * dx, cy + dx, Colour(0, 0, 0, 255));
+		}
 	}
 
 	void DrawTask::update(float dt){
@@ -201,7 +215,10 @@ namespace T3D {
 		for (auto each : poly) {
 			alloc.push_back(animation * each);
 		}
-		drawTriFan(alloc, Vector3(400.0, 300.0, 1.0));
+		drawTriFan(alloc, Vector3(200.0, 300.0, 1.0));
+
+		int theta = int(time * 100) % 314 - 314 / 2;
+		drawPie(600, 300, 100, abs(float(theta) / 100.0f));
 
 		app->getRenderer()->reloadTexture(drawArea);
 	}

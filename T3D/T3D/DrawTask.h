@@ -29,6 +29,7 @@ namespace T3D{
 		void drawCirclePythag(int x0, int y0, int r, Colour c);
 		void drawCircleBres(int x0, int y0, int r, Colour c);
 		void drawTriFan(vector<Vector3> points, Vector3 offset);
+		void plotHoriz(int xl, int xr, int y, Colour c);
 		void drawPie(int cx, int cy, int r, float theta);
 
 		virtual void update(float dt);
