@@ -17,13 +17,14 @@ namespace T3D {
 	{
 		drawArea = tex;
 		float triheight = sqrtf(1.0f * 1.0f - 0.5f * 0.5f);
-		poly[0] = Vector3(1.0f, 0.0f, 1.0f);
-		poly[1] = Vector3(0.5f, triheight, 1.0f);
-		poly[2] = Vector3(-0.5f, triheight, 1.0f);
-		poly[3] = Vector3(-1.0f, 0.0f, 1.0f);
-		poly[4] = Vector3(-0.5f, -triheight, 1.0f);
-		poly[5] = Vector3(0.5f, -triheight, 1.0f);
-		scale = 100.0f;
+		poly = {
+			Vector3(1.0f, 0.0f, 1.0f),
+			Vector3(0.5f, triheight, 1.0f),
+			Vector3(-0.5f, triheight, 1.0f),
+			Vector3(-1.0f, 0.0f, 1.0f),
+			Vector3(-0.5f, -triheight, 1.0f),
+			Vector3(0.5f, -triheight, 1.0f),
+		};
 		time = 0.0f;
 		init();
 	}
@@ -163,6 +164,22 @@ namespace T3D {
 		}
 	}
 
+	void DrawTask::drawTriFan(vector<Vector3> points, Vector3 offset) {
+		Vector3 c = offset + points[0];
+		Vector3 p1 = offset + points[1];
+		drawBresLine(c.x, c.y, p1.x, p1.y, Colour(0, 0, 0, 255));
+		for (int i = 1; i < poly.size(); i++) {
+			Vector3 p2 = offset + points[i];
+			drawBresLine(c.x, c.y, p2.x, p2.y, Colour(0, 0, 0, 255));
+			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(0, 0, 0, 255));
+			p1 = p2;
+		}
+	}
+
+	void DrawTask::drawPie(int cx, int cy, int r, float theta) {
+
+	}
+
 	void DrawTask::update(float dt){
 		drawArea->clear(Colour(255, 255, 255, 255));
 
@@ -178,19 +195,13 @@ namespace T3D {
 			0.0f, 100.0f, 0.0f,
 			0.0f, 0.0f, 1.0f
 		);
-		Matrix3x3 translateMat = Matrix3x3(
-			1.0f, 0.0f, 450.0 + 200 * cosf(time),
-			0.0f, 1.0f, 300.0f + 100 * sinf(2*time),
-			0.0f, 0.0f, 1.0f
-		);
-		Matrix3x3 animation = translateMat * scaleMat * rotateMat;
+		Matrix3x3 animation = scaleMat * rotateMat;
 
-		Vector3 p1 = animation * poly[5];
-		for (int i = 0; i < 6; i++) {
-			Vector3 p2 = animation * poly[i];
-			drawBresLine(p1.x, p1.y, p2.x, p2.y, Colour(255, 0, 0, 255));
-			p1 = p2;
+		alloc.clear();
+		for (auto each : poly) {
+			alloc.push_back(animation * each);
 		}
+		drawTriFan(alloc, Vector3(400.0, 300.0, 1.0));
 
 		app->getRenderer()->reloadTexture(drawArea);
 	}

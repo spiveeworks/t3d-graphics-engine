@@ -28,12 +28,15 @@ namespace T3D{
 		void drawCircleTrig(int x0, int y0, float r, Colour c);
 		void drawCirclePythag(int x0, int y0, int r, Colour c);
 		void drawCircleBres(int x0, int y0, int r, Colour c);
+		void drawTriFan(vector<Vector3> points, Vector3 offset);
+		void drawPie(int cx, int cy, int r, float theta);
 
 		virtual void update(float dt);
 
 	private:
 		Texture *drawArea;
-		Vector3 poly[6];
+		vector<Vector3> poly;
+		vector<Vector3> alloc;
 		float scale, time;
 	};
 
