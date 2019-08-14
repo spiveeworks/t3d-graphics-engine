@@ -11,7 +11,7 @@
 #include "Tutorial3.h"
 #include "Camera.h"
 #include "keyboardcontroller.h"
-#include "cube.h"
+#include "Pyramid.h"
 
 namespace T3D{
 
@@ -51,12 +51,12 @@ namespace T3D{
 		Material *green = renderer->createMaterial(Renderer::PR_OPAQUE);
 		green->setDiffuse(0, 1, 0, 1);
 
-		GameObject *cube = new GameObject(this);
-		cube->setMesh(new Cube(1));
-		cube->setMaterial(green);
-		cube->getTransform()->setLocalPosition(Vector3(0, 0, 0));
-		cube->getTransform()->setParent(root);
-		cube->getTransform()->name = "Cube";
+		GameObject *pyramid = new GameObject(this);
+		pyramid->setMesh(new Pyramid(1, 1));
+		pyramid->setMaterial(green);
+		pyramid->getTransform()->setLocalPosition(Vector3(0, 0, 0));
+		pyramid->getTransform()->setParent(root);
+		pyramid->getTransform()->name = "Pyramid";
 
 		return true;
 	}
