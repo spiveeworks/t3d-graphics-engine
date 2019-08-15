@@ -18,6 +18,7 @@
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DiagMessageTask.cpp" />
     <ClCompile Include="DrawTask.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -75,6 +76,7 @@
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DiagMessageTask.h" />
     <ClInclude Include="DrawTask.h" />
     <ClInclude Include="Font.h" />

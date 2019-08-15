@@ -12,6 +12,7 @@
 #include "Camera.h"
 #include "keyboardcontroller.h"
 #include "Pyramid.h"
+#include "Cylinder.h"
 
 namespace T3D{
 
@@ -54,9 +55,16 @@ namespace T3D{
 		GameObject *pyramid = new GameObject(this);
 		pyramid->setMesh(new Pyramid(1, 1));
 		pyramid->setMaterial(green);
-		pyramid->getTransform()->setLocalPosition(Vector3(0, 0, 0));
+		pyramid->getTransform()->setLocalPosition(Vector3(-2, 0, 0));
 		pyramid->getTransform()->setParent(root);
 		pyramid->getTransform()->name = "Pyramid";
+
+		GameObject *cylinder = new GameObject(this);
+		cylinder->setMesh(new Cylinder(1, 1, 51));
+		cylinder->setMaterial(green);
+		cylinder->getTransform()->setLocalPosition(Vector3(2, 0, 0));
+		cylinder->getTransform()->setParent(root);
+		cylinder->getTransform()->name = "Pyramid";
 
 		return true;
 	}
