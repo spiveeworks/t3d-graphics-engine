@@ -60,7 +60,7 @@ namespace T3D{
 		pyramid->getTransform()->name = "Pyramid";
 
 		GameObject *cylinder = new GameObject(this);
-		cylinder->setMesh(new Cylinder(1, 1, 51));
+		cylinder->setMesh(new Cylinder(1, 1, 50));
 		cylinder->setMaterial(green);
 		cylinder->getTransform()->setLocalPosition(Vector3(2, 0, 0));
 		cylinder->getTransform()->setParent(root);

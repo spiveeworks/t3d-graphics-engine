@@ -5,8 +5,8 @@ namespace T3D {
 	Cylinder::Cylinder(float radius, float height, int sides)
 	{
 		// Init vertex and index arrays
-		initArrays(2 + 2 * sides,	// num vertices
-			2 * sides,		// num tris
+		initArrays(4 * sides,	// num vertices
+			2 * (sides - 2),		// num tris
 			sides);		// num quads
 
 					// Set vertices
@@ -18,17 +18,20 @@ namespace T3D {
 			float theta = dtheta * i;
 			float x = radius * cos(theta);
 			float z = radius * sin(theta);
-			setVertex(i, x, height, z);
-			setVertex(sides + i, x, -height, z);
+			setVertex(0 * sides + i, x,  height, z);
+			setVertex(1 * sides + i, x, -height, z);
+			setVertex(2 * sides + i, x,  height, z);
+			setVertex(3 * sides + i, x, -height, z);
 		}
 
 		// Build quads and tris
-		for (int i = 0, j = sides-1; i < sides; j = i++) {
-			// int j = (i - 1) % sides;
-			setFace(i, i, sides + i, sides + j, j);
-
-			setFace(i, 2 * sides, i, j);
-			setFace(sides + i, 2 * sides + 1, sides + j, sides + i);
+		for (int i = 0; i < sides; i++) {
+			int j = (i + 1) % sides;
+			setFace(i, j, sides + j, sides + i, i);
+		}
+		for (int i = 1; i <= sides - 2; i++) {
+			setFace(i         - 1, 2 * sides + 0, 2 * sides + i + 1, 2 * sides + i    );
+			setFace(i + sides - 3, 3 * sides + 0, 3 * sides + i,     3 * sides + i + 1);
 		}
 
 
