@@ -104,7 +104,7 @@ namespace T3D {
 			shadeProfile.push_back(Vector3(0.059f, 0.06f, 0.0f));
 			shadeProfile.push_back(Vector3(0.031f, 0.03f, 0.0f));
 			shadeProfile.push_back(Vector3(0.031f, 0.03f, 0.0f));
-			shadeProfile.push_back(Vector3(0.001f, 0.03f, 0.0f));  // make x not 0 so that quads have nice normals
+			shadeProfile.push_back(Vector3(0.0f, 0.03f, 0.0f));
 
 			Transform t;
 
