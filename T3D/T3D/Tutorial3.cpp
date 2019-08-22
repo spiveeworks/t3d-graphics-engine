@@ -13,6 +13,7 @@
 #include "keyboardcontroller.h"
 #include "Pyramid.h"
 #include "Cylinder.h"
+#include "Lamp.h"
 
 namespace T3D{
 
@@ -40,11 +41,11 @@ namespace T3D{
 			setLocalRotation(Vector3(-45 * Math::DEG2RAD, 70 * Math::DEG2RAD, 0));
 		lightObj->getTransform()->setParent(root);
 
+		//add a camera to the scene
+		//This camera is super fast... you have been warned
 		GameObject *camObj = new GameObject(this);
-		renderer->camera =
-			new Camera(Camera::PERSPECTIVE, 0.1, 500.0, 45.0, 1.6);
-		camObj->getTransform()->setLocalPosition(Vector3(0, 0, 20));
-		camObj->getTransform()->setLocalRotation(Vector3(0, 0, 0));
+		renderer->camera = new Camera(Camera::PERSPECTIVE, 0.1, 500.0, 45.0, 1.6);
+		camObj->getTransform()->setLocalPosition(Vector3(0, 0.5, 3));
 		camObj->setCamera(renderer->camera);
 		camObj->getTransform()->setParent(root);
 		camObj->addComponent(new KeyboardController());
@@ -65,6 +66,14 @@ namespace T3D{
 		cylinder->getTransform()->setLocalPosition(Vector3(2, 0, 0));
 		cylinder->getTransform()->setParent(root);
 		cylinder->getTransform()->name = "Pyramid";
+
+		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
+		grey->setDiffuse(0.8, 0.8, 0.9, 1);
+		Lamp *lamp = new Lamp(this);
+		lamp->setMaterial(grey);
+		lamp->base->setMaterial(grey);
+		lamp->getTransform()->setLocalPosition(Vector3(4, 0, 0));
+		lamp->getTransform()->setParent(root);
 
 		return true;
 	}
