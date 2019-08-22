@@ -72,6 +72,7 @@ namespace T3D{
 		Lamp *lamp = new Lamp(this);
 		lamp->setMaterial(grey);
 		lamp->base->setMaterial(grey);
+		lamp->arm1->setMaterial(grey);
 		lamp->getTransform()->setLocalPosition(Vector3(4, 0, 0));
 		lamp->getTransform()->setParent(root);
 
