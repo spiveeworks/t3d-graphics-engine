@@ -20,8 +20,8 @@
 namespace T3D
 {
 	//min and max speeds for key and mouse sensitivity
-	#define KEY_SENSITIVITY_MIN 50
-	#define KEY_SENSITIVITY_MAX 100
+	#define KEY_SENSITIVITY_MIN 5
+	#define KEY_SENSITIVITY_MAX 10
 	#define MOUSE_SENSITIVITY_MIN 0.0005f;
 	#define MOUSE_SENSITIVITY_MAX 0.0010f;
 

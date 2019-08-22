@@ -74,11 +74,12 @@ namespace T3D{
 		lamp->base->setMaterial(grey);
 		lamp->arm1->setMaterial(grey);
 		lamp->arm2->setMaterial(grey);
+		lamp->shadeJoint->setMaterial(grey);
 		lamp->getTransform()->setLocalPosition(Vector3(4, 0, 0));
 		lamp->getTransform()->setParent(root);
 
 		lamp->baseJoint->getTransform()->setLocalRotation(Quaternion(Vector3(-Math::PI / 10, Math::PI / 4, 0)));
-		lamp->elbowJoint->getTransform()->setLocalRotation(Quaternion(Vector3(Math::PI / 4, 0, 0)));
+		lamp->shadeJoint->getTransform()->setLocalRotation(Quaternion(Vector3(Math::PI / 4, 0, 0)));
 
 		return true;
 	}

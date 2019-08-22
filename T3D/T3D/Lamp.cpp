@@ -89,6 +89,30 @@ namespace T3D {
 		arm2->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
 		arm2->getTransform()->setParent(elbowJoint->getTransform());
 		arm2->getTransform()->name = "Arm2";
+
+		std::vector<Vector3> shadeProfile;
+		SweepPath shadesp;
+		{
+			shadeProfile.push_back(Vector3(0.00f, -0.03f, 0.0f));
+			shadeProfile.push_back(Vector3(0.03f, -0.02f, 0.0f));
+			shadeProfile.push_back(Vector3(0.032f, 0.03f, 0.0f));
+			shadeProfile.push_back(Vector3(0.061f, 0.06f, 0.0f));
+			shadeProfile.push_back(Vector3(0.07f, 0.08f, 0.0f));
+			shadeProfile.push_back(Vector3(0.07f, 0.08f, 0.0f));
+			shadeProfile.push_back(Vector3(0.069f, 0.08f, 0.0f));
+			shadeProfile.push_back(Vector3(0.069f, 0.08f, 0.0f));
+			shadeProfile.push_back(Vector3(0.059f, 0.06f, 0.0f));
+			shadeProfile.push_back(Vector3(0.031f, 0.03f, 0.0f));
+			shadeProfile.push_back(Vector3(0.031f, 0.03f, 0.0f));
+			shadeProfile.push_back(Vector3(0.001f, 0.03f, 0.0f));  // make x not 0 so that quads have nice normals
+
+			Transform t;
+
+			shadesp.makeCirclePath(0.0f, 8);
+		}
+
+		shadeJoint->setMesh(new Sweep(shadeProfile, shadesp, true));
+		shadeJoint->getTransform()->setLocalScale(Vector3(1.6, 1.6, 1.6));
 	}
 
 	Lamp::~Lamp() {
