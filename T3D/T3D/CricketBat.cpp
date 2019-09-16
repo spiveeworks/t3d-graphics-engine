@@ -31,34 +31,30 @@ namespace T3D {
 			t.setLocalPosition(Vector3(0, 0, 0));
 			t.setLocalRotation(Quaternion(Vector3(0, Math::PI / 2, 0)));
 
-			float pommelSize = 1.1f;
-			float x;
-			float y;
-			for (float i = 0.0f; i <= 12.0f; i += 1.0f) {
-				x = pommelSize * cos((20.0f - i) * 0.05f * Math::PI);
-				y = pommelSize * sin((20.0f - i) * 0.05f * Math::PI);
+			float handleTwirl = 2 * Math::TWO_PI / ridges;
+			float handleLength = 5.0f;
+			for (float i = 1.0f; i <= 10.0f; i += 1.0f) {
+				t.setLocalScale(Vector3(i == 1.0f ? 1.5f : 1.0f, 1.0f, 1.0));
+				t.setLocalPosition(Vector3(handleLength * (i / 10.0f), 0, 0));
+				t.setLocalRotation(Quaternion(Quaternion(Vector3(i * handleTwirl / 10.0f, 0, 0)) * Quaternion(Vector3(0, Math::PI / 2, 0))));
+				handlesp.addTransform(t);
+			}
+			//handlesp.addTransform(t);
+
+			float angle = 8.0f;
+			float pommelSize = 1.0f / sin(angle * 0.05f * Math::PI);
+			float pommelCentre = handleLength + pommelSize * cos(angle * 0.05f * Math::PI);
+			for (angle++; angle <= 20.0f; angle++) {
+				float x = pommelCentre - pommelSize * cos(angle * 0.05f * Math::PI);
+				float y = pommelSize * sin(angle * 0.05f * Math::PI);
 				t.setLocalScale(Vector3(y, y, 1.0));
 				t.setLocalPosition(Vector3(x, 0, 0));
 				handlesp.addTransform(t);
 			}
-
-			float handleTwirl = 2 * Math::TWO_PI / ridges;
-			float handleLength = 5.0f;
-			for (float i = 1.0f; i <= 10.0f; i += 1.0f) {
-				t.setLocalScale(Vector3(y, y, 1.0));
-				t.setLocalPosition(Vector3(x + handleLength * (i / 10.0f), 0, 0));
-				t.setLocalRotation(Quaternion(Quaternion(Vector3(i * handleTwirl / 10.0f, 0, 0)) * Quaternion(Vector3(0, Math::PI / 2, 0))));
-				handlesp.addTransform(t);
-			}
-			handlesp.addTransform(t);
-
-			//Adjust the scale for the final 'cap':
-			t.setLocalScale(Vector3(0, 0, 1.0));
-			handlesp.addTransform(t);
 		}
 
 		handle = new GameObject(app);
-		handle->setMesh(new Sweep(handleProfile, handlesp, true));
+		handle->setMesh(new Sweep(handleProfile, handlesp, false));
 		handle->getTransform()->setParent(getTransform());
 		handle->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
 		handle->getTransform()->name = "handle";
