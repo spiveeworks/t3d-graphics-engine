@@ -6,7 +6,7 @@
 
 namespace T3D {
 	StickFigure::StickFigure(T3DApplication *app, Material *mat) :GameObject(app) {
-		setMesh(new Capsule(.1, .01, 16));
+		setMesh(new Capsule(5, 10, 50));
 		getTransform()->name = "StickFigure";
 		setMaterial(mat);
 
