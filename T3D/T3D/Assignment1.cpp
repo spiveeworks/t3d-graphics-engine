@@ -14,6 +14,7 @@
 #include "CricketBat.h"
 #include "StickFigure.h"
 #include "HoleInWall.h"
+#include "ChipInWall.h"
 
 namespace T3D{
 
@@ -57,24 +58,32 @@ namespace T3D{
 		carbonfibre->setShininess(10);
 		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
 		CricketBat *bat = new CricketBat(this, wood, carbonfibre);
-		bat->getTransform()->setLocalPosition(Vector3(0, 0, 0));
+		bat->getTransform()->setLocalPosition(Vector3(-6, 0, 0));
 		bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
 		bat->getTransform()->setParent(root);
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
 		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05, 0.05, 0.5, grey);
-		person->getTransform()->setLocalPosition(Vector3(4, 0, 0));
+		person->getTransform()->setLocalPosition(Vector3(-2, 0, 0));
 		person->getTransform()->setParent(root);
 
 		Material *green = renderer->createMaterial(Renderer::PR_OPAQUE);
 		green->setDiffuse(0, 0.8f, 0, 1);
-		GameObject *wall = new GameObject(this);
-		wall->setMesh(new HoleInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 27));
-		wall->getTransform()->setLocalPosition(Vector3(8, 0, 0));
-		wall->getTransform()->name = "Hole In The Wall";
-		wall->setMaterial(green);
-		wall->getTransform()->setParent(root);
+		GameObject *wall1 = new GameObject(this);
+		wall1->setMesh(new HoleInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 27));
+		wall1->getTransform()->setLocalPosition(Vector3(2, 0, 0));
+		wall1->getTransform()->name = "Hole In The Wall";
+		wall1->setMaterial(green);
+		wall1->getTransform()->setParent(root);
+
+		green->setDiffuse(0, 0.8f, 0, 1);
+		GameObject *wall2 = new GameObject(this);
+		wall2->setMesh(new ChipInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 27));
+		wall2->getTransform()->setLocalPosition(Vector3(8, 0, 0));
+		wall2->getTransform()->name = "Chip In The Wall";
+		wall2->setMaterial(green);
+		wall2->getTransform()->setParent(root);
 
 		return true;
 	}

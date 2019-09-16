@@ -249,6 +249,9 @@
     <ClCompile Include="HoleInWall.cpp">
       <Filter>Source Files\Component\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="ChipInWall.cpp">
+      <Filter>Source Files\Component\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h">
@@ -438,6 +441,9 @@
       <Filter>Header Files\Component\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="HoleInWall.h">
+      <Filter>Header Files\Component\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ChipInWall.h">
       <Filter>Header Files\Component\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
