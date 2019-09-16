@@ -62,8 +62,8 @@ namespace T3D{
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
-		StickFigure *person = new StickFigure(this, grey);
-		person->getTransform()->setLocalPosition(Vector3(0, 0, 1));
+		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05, 0.05, 0.5, grey);
+		person->getTransform()->setLocalPosition(Vector3(0, 0, 3));
 		//bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
 		person->getTransform()->setParent(root);
 
