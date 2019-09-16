@@ -79,8 +79,9 @@ namespace T3D{
 
 		green->setDiffuse(0, 0.8f, 0, 1);
 		GameObject *wall2 = new GameObject(this);
-		wall2->setMesh(new ChipInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 27));
+		wall2->setMesh(new ChipInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 0.07f, 27));
 		wall2->getTransform()->setLocalPosition(Vector3(8, 0, 0));
+		wall2->getTransform()->setLocalRotation(Quaternion(Vector3(0, Math::PI, 0)));
 		wall2->getTransform()->name = "Chip In The Wall";
 		wall2->setMaterial(green);
 		wall2->getTransform()->setParent(root);

@@ -12,6 +12,7 @@ namespace T3D
 			float ChipX,      // the x position of the centre of the Chip
 			float ChipY,       // the y position of the centre of the Chip
 			float radius,     // the radius of the Chip
+			float depth,     // the radius of the Chip
 			int density        // the density of the Chip
 		);
 		virtual ~ChipInWall(void);
