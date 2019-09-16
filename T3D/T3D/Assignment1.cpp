@@ -13,6 +13,7 @@
 #include "keyboardcontroller.h"
 #include "CricketBat.h"
 #include "StickFigure.h"
+#include "HoleInWall.h"
 
 namespace T3D{
 
@@ -63,9 +64,17 @@ namespace T3D{
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
 		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05, 0.05, 0.5, grey);
-		person->getTransform()->setLocalPosition(Vector3(0, 0, 3));
-		//bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
+		person->getTransform()->setLocalPosition(Vector3(4, 0, 0));
 		person->getTransform()->setParent(root);
+
+		Material *green = renderer->createMaterial(Renderer::PR_OPAQUE);
+		green->setDiffuse(0, 0.8f, 0, 1);
+		GameObject *wall = new GameObject(this);
+		wall->setMesh(new HoleInWall(Vector3(), 0.0f, 0.0f, 1.0f, 27));
+		wall->getTransform()->setLocalPosition(Vector3(8, 0, 0));
+		wall->getTransform()->name = "Hole In The Wall";
+		wall->setMaterial(green);
+		wall->getTransform()->setParent(root);
 
 		return true;
 	}

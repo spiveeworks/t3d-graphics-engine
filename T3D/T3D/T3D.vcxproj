@@ -31,6 +31,7 @@
     <ClCompile Include="GLShader.cpp" />
     <ClCompile Include="GLTestApplication.cpp" />
     <ClCompile Include="GLTestRenderer.cpp" />
+    <ClCompile Include="HoleInWall.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="KeyboardController.cpp" />
     <ClCompile Include="Lamp.cpp" />
@@ -94,6 +95,7 @@
     <ClInclude Include="GLShader.h" />
     <ClInclude Include="GLTestApplication.h" />
     <ClInclude Include="GLTestRenderer.h" />
+    <ClInclude Include="HoleInWall.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="KeyboardController.h" />
     <ClInclude Include="Lamp.h" />
