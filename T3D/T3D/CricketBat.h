@@ -8,11 +8,7 @@ namespace T3D {
 		CricketBat(T3DApplication *app, Material *mat);
 		~CricketBat(void);
 
-		GameObject *base;
-		GameObject *arm1;
-		GameObject *arm2;
-		GameObject *baseJoint;
-		GameObject *elbowJoint;
-		GameObject *shadeJoint;
+		GameObject *handle;
+		GameObject *blade;
 	};
 }

@@ -13,7 +13,7 @@
 #include "keyboardcontroller.h"
 #include "Pyramid.h"
 #include "Cylinder.h"
-#include "CricketBat.h"
+#include "Lamp.h"
 
 namespace T3D{
 
@@ -69,9 +69,17 @@ namespace T3D{
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8, 0.8, 0.9, 1);
-		CricketBat *bat = new CricketBat(this, grey);
-		bat->getTransform()->setLocalPosition(Vector3(6, 0, 0));
-		bat->getTransform()->setParent(root);
+		Lamp *lamp = new Lamp(this);
+		lamp->setMaterial(grey);
+		lamp->base->setMaterial(grey);
+		lamp->arm1->setMaterial(grey);
+		lamp->arm2->setMaterial(grey);
+		lamp->shadeJoint->setMaterial(grey);
+		lamp->getTransform()->setLocalPosition(Vector3(4, 0, 0));
+		lamp->getTransform()->setParent(root);
+
+		lamp->baseJoint->getTransform()->setLocalRotation(Quaternion(Vector3(-Math::PI / 10, Math::PI / 4, 0)));
+		lamp->shadeJoint->getTransform()->setLocalRotation(Quaternion(Vector3(Math::PI / 4, 0, 0)));
 
 		return true;
 	}

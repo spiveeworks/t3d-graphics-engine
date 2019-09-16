@@ -6,95 +6,71 @@
 
 namespace T3D {
 	CricketBat::CricketBat(T3DApplication *app, Material *mat) :GameObject(app) {
-		setMesh(new Cylinder(.1, .01, 16));
-		getTransform()->name = "Lamp";
-
-		base = new GameObject(app); // note the use of 'app' not 'this' - you should understand why
-		base->setMesh(new Cylinder(.02, .01, 16));
-		base->getTransform()->setParent(getTransform()); // attaching this piece to the Lamp object's transform
-		base->getTransform()->setLocalPosition(Vector3(0, 0.02, 0));
-		base->getTransform()->name = "Base";
-
+		getTransform()->name = "CricketBat";
 		setMaterial(mat);
-		base->setMaterial(mat);
-		arm1->setMaterial(mat);
-		arm2->setMaterial(mat);
 
-		std::vector<Vector3> armProfile;
-		SweepPath armsp;
+		std::vector<Vector3> handleProfile;
+		SweepPath handlesp;
 		{
-			armProfile.push_back(Vector3(0.0f, -0.12f, 0.0f));
-			armProfile.push_back(Vector3(0.014f, -0.114f, 0.0f));
-			armProfile.push_back(Vector3(0.02f, -0.1f, 0.0f));
-			armProfile.push_back(Vector3(0.02f, 0.1f, 0.0f));
-			armProfile.push_back(Vector3(0.014f, 0.114f, 0.0f));
-			armProfile.push_back(Vector3(0.0f, 0.12f, 0.0f));
-			armProfile.push_back(Vector3(-0.014f, 0.114f, 0.0f));
-			armProfile.push_back(Vector3(-0.02f, 0.1f, 0.0f));
-			armProfile.push_back(Vector3(-0.02f, -0.1f, 0.0f));
-			armProfile.push_back(Vector3(-0.014f, -0.114f, 0.0f));
+			float ridges = 8.0f;
+			float ridgeWidth = Math::TWO_PI / ridges;
+			float lowPortion = 0.2f;
+			float slopePortion = 0.1f;
+			float lowRadius = 1.0f;
+			float highRadius = 1.05f;
+			for (float ridge = 0; ridge < ridges; ridge++) {
+				auto add = [&](float r, float theta) { handleProfile.push_back(Vector3(r * cos(theta), r * sin(theta), 0.0f)); };
+				add(lowRadius, ridge * ridgeWidth);
+				add(lowRadius, (ridge + lowPortion) * ridgeWidth);
+				add(highRadius, (ridge + lowPortion + slopePortion) * ridgeWidth);
+				add(highRadius, (ridge + (1.0f - slopePortion)) * ridgeWidth);
+			}
 
 			Transform t;
 
-			t.setLocalPosition(Vector3(-0.01, 0, 0));
+			t.setLocalPosition(Vector3(0, 0, 0));
 			t.setLocalRotation(Quaternion(Vector3(0, Math::PI / 2, 0)));
-			t.setLocalScale(Vector3(0, 0, 1.0)); // no need to scale the z-direction because the profile is in the XY plane
-			armsp.addTransform(t);
 
-			//Adjust the scale for the next path instance :
-			t.setLocalScale(Vector3(0.9, 1, 1.0));
-			armsp.addTransform(t);
-			armsp.addTransform(t);
+			float pommelSize = 1.1f;
+			float x;
+			float y;
+			for (float i = 0.0f; i <= 12.0f; i += 1.0f) {
+				x = pommelSize * cos((20.0f - i) * 0.05f * Math::PI);
+				y = pommelSize * sin((20.0f - i) * 0.05f * Math::PI);
+				t.setLocalScale(Vector3(y, y, 1.0));
+				t.setLocalPosition(Vector3(x, 0, 0));
+				handlesp.addTransform(t);
+			}
 
-			//Adjust the position and scale for the next path instance :
-			t.setLocalPosition(Vector3(-0.0075, 0, 0));
-			t.setLocalScale(Vector3(1, 1, 1.0));
-			armsp.addTransform(t);
-			armsp.addTransform(t);
-
-			//Adjust the position for the next path instance :
-			t.setLocalPosition(Vector3(0.0075, 0, 0));
-			armsp.addTransform(t);
-			armsp.addTransform(t);
-
-			//Adjust the position for the next path instance :
-			t.setLocalPosition(Vector3(0.01, 0, 0));
-			t.setLocalScale(Vector3(0.9, 1, 1.0));
-			armsp.addTransform(t);
-			armsp.addTransform(t);
+			float handleTwirl = 2 * Math::TWO_PI / ridges;
+			float handleLength = 5.0f;
+			for (float i = 1.0f; i <= 10.0f; i += 1.0f) {
+				t.setLocalScale(Vector3(y, y, 1.0));
+				t.setLocalPosition(Vector3(x + handleLength * (i / 10.0f), 0, 0));
+				t.setLocalRotation(Quaternion(Quaternion(Vector3(i * handleTwirl / 10.0f, 0, 0)) * Quaternion(Vector3(0, Math::PI / 2, 0))));
+				handlesp.addTransform(t);
+			}
+			handlesp.addTransform(t);
 
 			//Adjust the scale for the final 'cap':
 			t.setLocalScale(Vector3(0, 0, 1.0));
-			armsp.addTransform(t);
+			handlesp.addTransform(t);
 		}
 
-		baseJoint = new GameObject(app);
-		baseJoint->getTransform()->setParent(base->getTransform());
-		baseJoint->getTransform()->name = "BaseJoint";
+		handle = new GameObject(app);
+		handle->setMesh(new Sweep(handleProfile, handlesp, true));
+		handle->getTransform()->setParent(getTransform());
+		handle->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
+		handle->getTransform()->name = "handle";
+		handle->setMaterial(mat);
 
-		elbowJoint = new GameObject(app);
-		elbowJoint->getTransform()->setLocalPosition(Vector3(0, 0.2, 0));
-		elbowJoint->getTransform()->setParent(baseJoint->getTransform());
-		elbowJoint->getTransform()->setLocalRotation(Quaternion(Vector3(Math::PI / 4, 0, 0))); // this rotation is just to make a good starting pose
-		elbowJoint->getTransform()->name = "ElbowJoint";
+		blade = new GameObject(app);
+		blade->getTransform()->setParent(getTransform());
+		blade->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
+		blade->getTransform()->name = "blade";
+		blade->setMaterial(mat);
 
-		shadeJoint = new GameObject(app);
-		shadeJoint->getTransform()->setLocalPosition(Vector3(0, 0.2, 0));
-		shadeJoint->getTransform()->setParent(elbowJoint->getTransform());
-		shadeJoint->getTransform()->name = "ShadeJoint";
-
-		arm1 = new GameObject(app);
-		arm1->setMesh(new Sweep(armProfile, armsp, false));
-		arm1->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
-		arm1->getTransform()->setParent(baseJoint->getTransform());
-		arm1->getTransform()->name = "Arm1";
-
-		arm2 = new GameObject(app);
-		arm2->setMesh(new Sweep(armProfile, armsp, false));
-		arm2->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
-		arm2->getTransform()->setParent(elbowJoint->getTransform());
-		arm2->getTransform()->name = "Arm2";
-
+		/*
 		std::vector<Vector3> shadeProfile;
 		SweepPath shadesp;
 		{
@@ -118,6 +94,7 @@ namespace T3D {
 
 		shadeJoint->setMesh(new Sweep(shadeProfile, shadesp, true));
 		shadeJoint->getTransform()->setLocalScale(Vector3(1.6, 1.6, 1.6));
+		*/
 	}
 
 	CricketBat::~CricketBat() {
