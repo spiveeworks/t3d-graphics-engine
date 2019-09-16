@@ -9,7 +9,7 @@
 // Main entry point. Creates and runs a T3DApplication
 
 #include "T3DTest.h"
-#include "Tutorial3.h"
+#include "Assignment1.h"
 #include "ShaderTest.h"
 #include "GLTestApplication.h"
 
@@ -22,7 +22,7 @@ using namespace T3D;
 
 int main(int argc, char* argv[]){
 	//T3DApplication *theApp = new T3DTest();
-	T3DApplication *theApp = new Tutorial3();
+	T3DApplication *theApp = new Assignment1();
 	//T3DApplication *theApp = new GLTestApplication();
 	//T3DApplication *theApp = new ShaderTest();
 
