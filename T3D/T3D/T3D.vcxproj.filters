@@ -240,6 +240,12 @@
     <ClCompile Include="CricketBat.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="StickFigure.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Capsule.cpp">
+      <Filter>Source Files\Component\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h">
@@ -421,6 +427,12 @@
     </ClInclude>
     <ClInclude Include="CricketBat.h">
       <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="StickFigure.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Capsule.h">
+      <Filter>Header Files\Component\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

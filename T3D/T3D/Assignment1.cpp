@@ -11,9 +11,8 @@
 #include "Assignment1.h"
 #include "Camera.h"
 #include "keyboardcontroller.h"
-#include "Pyramid.h"
-#include "Cylinder.h"
 #include "CricketBat.h"
+#include "StickFigure.h"
 
 namespace T3D{
 
@@ -60,6 +59,13 @@ namespace T3D{
 		bat->getTransform()->setLocalPosition(Vector3(0, 0, 0));
 		bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
 		bat->getTransform()->setParent(root);
+
+		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
+		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
+		StickFigure *person = new StickFigure(this, grey);
+		person->getTransform()->setLocalPosition(Vector3(0, 0, 1));
+		//bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
+		person->getTransform()->setParent(root);
 
 		return true;
 	}
