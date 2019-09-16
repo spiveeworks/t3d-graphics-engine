@@ -5,7 +5,7 @@ namespace T3D {
 	class CricketBat : public GameObject
 	{
 	public:
-		CricketBat(T3DApplication *app, Material *mat);
+		CricketBat(T3DApplication *app, Material *blade, Material *handle);
 		~CricketBat(void);
 
 		GameObject *handle;

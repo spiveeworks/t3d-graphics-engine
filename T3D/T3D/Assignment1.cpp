@@ -50,10 +50,15 @@ namespace T3D{
 		camObj->getTransform()->setParent(root);
 		camObj->addComponent(new KeyboardController());
 
-		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
-		grey->setDiffuse(0.8, 0.8, 0.9, 1);
-		CricketBat *bat = new CricketBat(this, grey);
-		bat->getTransform()->setLocalPosition(Vector3(6, 0, 0));
+		Material *wood = renderer->createMaterial(Renderer::PR_OPAQUE);
+		wood->setDiffuse(0.9f, 0.8f, 0.7f, 1);
+		Material *carbonfibre = renderer->createMaterial(Renderer::PR_OPAQUE);
+		carbonfibre->setDiffuse(0.2, 0.2, 0.2, 1);
+		carbonfibre->setShininess(10);
+		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
+		CricketBat *bat = new CricketBat(this, wood, carbonfibre);
+		bat->getTransform()->setLocalPosition(Vector3(0, 0, 0));
+		bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
 		bat->getTransform()->setParent(root);
 
 		return true;
