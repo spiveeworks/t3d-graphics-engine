@@ -70,7 +70,7 @@ namespace T3D{
 		Material *green = renderer->createMaterial(Renderer::PR_OPAQUE);
 		green->setDiffuse(0, 0.8f, 0, 1);
 		GameObject *wall = new GameObject(this);
-		wall->setMesh(new HoleInWall(Vector3(), 0.0f, 0.0f, 1.0f, 27));
+		wall->setMesh(new HoleInWall(Vector3(2.0f, 2.0f, 0.2f), 0.0f, 0.0f, 1.0f, 27));
 		wall->getTransform()->setLocalPosition(Vector3(8, 0, 0));
 		wall->getTransform()->name = "Hole In The Wall";
 		wall->setMaterial(green);

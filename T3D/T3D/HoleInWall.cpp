@@ -1,4 +1,5 @@
 #include "HoleInWall.h"
+#include "Math.h"
 
 namespace T3D
 {
@@ -8,102 +9,83 @@ namespace T3D
 		float radius,     // the radius of the hole
 		int density        // the density of the hole
 	) {
-		float size = 1.0f;
 		// Init vertex and index arrays
-		initArrays(4 * 6,	// num vertices
-			       0,		// num tris
-			       6);		// num quads
+		initArrays(3 * 8 + 4 * density,	// num vertices
+			       8 + 2 * density,		// num tris (front and back)
+			       4 + density);		// num quads (sides and hole)
+		
+		// corner vertices
+		int c = 0;
+		for (int k = -1; k <= 1; k += 2) {
+			for (int j = -1; j <= 1; j += 2) {
+				for (int i = -1; i <= 1; i += 2) {
+					setVertex(c, i*wallSize.x, j*wallSize.y, k*wallSize.z);
+					setVertex(8 + c, i*wallSize.x, j*wallSize.y, k*wallSize.z);
+					setVertex(16 + c, i*wallSize.x, j*wallSize.y, k*wallSize.z);
+					c++;  // nice
+				}
+			}
+		}
+		
+		// hole vertices
+		for (int i = 0; i < density; i++) {
+			float theta = Math::TWO_PI * float(i) / float(density);
+			float x = holeX + radius * cos(theta);
+			float y = holeY + radius * sin(theta);
+			setVertex(24 + i, x, y, -wallSize.z);
+			setVertex(24 + density + i, x, y, wallSize.z);
+			setVertex(24 + 2 * density + i, x, y, -wallSize.z);
+			setVertex(24 + 3 * density + i, x, y, wallSize.z);
+		}
 
-		// Set vertices
+		// front/back tris
+		int prevk = 1;
+		for (int i = 0; i < density; i++) {
+			int j = (i + 1) % density;
+			float theta = Math::TWO_PI * (float(i) + 0.5f) / float(density);
+			int k;
+			if (theta < Math::HALF_PI) {
+				k = 3;
+			}
+			else if (theta < 2 * Math::HALF_PI) {
+				k = 2;
+			}
+			else if (theta < 3 * Math::HALF_PI) {
+				k = 0;
+			}
+			else {
+				k = 1;
+			}
+			setFace(i, 24 + i, 24 + j, k);
+			setFace(density + i, 24 + density + j, 24 + density + i, 4 + k);
+			
+			if (prevk != k) {
+				setFace(2 * density + k, 24 + i, k, prevk);
+				setFace(2 * density + 4 + k, 24 + density + i, 4 + prevk, 4 + k);
+				prevk = k;
+			}
+		}
 
-		int pos=0;
-		//front
-		setVertex(pos++,-size,-size,-size);
-		setVertex(pos++,size,-size,-size);
-		setVertex(pos++,size,size,-size);
-		setVertex(pos++,-size,size,-size);
-		//back
-		setVertex(pos++,-size,-size,size);
-		setVertex(pos++,size,-size,size);
-		setVertex(pos++,size,size,size);
-		setVertex(pos++,-size,size,size);
 		//left
-		setVertex(pos++,-size,-size,-size);
-		setVertex(pos++,-size,size,-size);
-		setVertex(pos++,-size,size,size);
-		setVertex(pos++,-size,-size,size);
+		setFace(0, 8 + 2, 8 + 0, 8 + 4, 8 + 6);
 		//right
-		setVertex(pos++,size,-size,-size);
-		setVertex(pos++,size,size,-size);
-		setVertex(pos++,size,size,size);
-		setVertex(pos++,size,-size,size);
+		setFace(1, 8 + 1, 8 + 3, 8 + 7, 8 + 5);
 		//bottom
-		setVertex(pos++,-size,-size,-size);
-		setVertex(pos++,-size,-size,size);
-		setVertex(pos++,size,-size,size);
-		setVertex(pos++,size,-size,-size);
+		setFace(2, 16 + 0, 16 + 1, 16 + 5, 16 + 4);
 		//top
-		setVertex(pos++,-size,size,-size);
-		setVertex(pos++,-size,size,size);
-		setVertex(pos++,size,size,size);
-		setVertex(pos++,size,size,-size);
+		setFace(3, 16 + 3, 16 + 2, 16 + 6, 16 + 7);
 
-		// Build quads
-		pos = 0;
-		//front
-		setFace(pos++,3,2,1,0);
-		//back
-		setFace(pos++,4,5,6,7);
-		//left
-		setFace(pos++,11,10,9,8);
-		//right
-		setFace(pos++,12,13,14,15);
-		//bottom
-		setFace(pos++,19,18,17,16);
-		//top
-		setFace(pos++,20,21,22,23);
-
+		// inner quads
+		for (int i = 0; i < density; i++) {
+			int j = (i + 1) % density;
+			setFace(4 + i, 24 + 2 * density + j, 24 + 2 * density + i, 24 + 3 * density + i, 24 + 3 * density + j);
+		}
+		
 		// Check vertex and index arrays
 		checkArrays();
 
 		// Calculate normals
-		calcNormals();	
-
-		// Setup other arrays		
-		pos = 0;
-		//front
-		for (int i=0; i<4; i++){
-			colors[pos++] = 1; colors[pos++] = 0; colors[pos++] = 0; colors[pos++] = 1;
-		}
-		//back
-		for (int i=0; i<4; i++){
-			colors[pos++] = 1; colors[pos++] = 0; colors[pos++] = 0; colors[pos++] = 1;
-		}
-		//left
-		for (int i=0; i<4; i++){
-			colors[pos++] = 0; colors[pos++] = 1; colors[pos++] = 0; colors[pos++] = 1;
-		}
-		//right
-		for (int i=0; i<4; i++){
-			colors[pos++] = 0; colors[pos++] = 1; colors[pos++] = 0; colors[pos++] = 1;
-		}
-		//bottom
-		for (int i=0; i<4; i++){
-			colors[pos++] = 0; colors[pos++] = 0; colors[pos++] = 1; colors[pos++] = 1;
-		}
-		//top
-		for (int i=0; i<4; i++){
-			colors[pos++] = 0; colors[pos++] = 0; colors[pos++] = 1; colors[pos++] = 1;
-		}	
-
-		//uvs
-		pos = 0;
-		for (int f = 0; f<6; f++){
-			uvs[pos++] = 0; uvs[pos++] = 0; 
-			uvs[pos++] = 0; uvs[pos++] = 1; 
-			uvs[pos++] = 1; uvs[pos++] = 1; 
-			uvs[pos++] = 1; uvs[pos++] = 0; 
-		}
+		calcNormals();
 	}
 
 
