@@ -2,6 +2,7 @@
 #include "T3DApplication.h"
 #include "Capsule.h"
 #include "Sphere.h"
+#include "Animation.h"
 
 namespace T3D {
 	StickFigure::StickFigure(T3DApplication *app, float limbLength, float limbRadius, float torsoLength, float torsoRadius, float collarWidth, float pelvisWidth, float headRadius, Material *mat) :GameObject(app) {
@@ -50,7 +51,7 @@ namespace T3D {
 		leftUpperArm->setMesh(new Capsule(limbRadius, limbLength, 16));
 		leftUpperArm->getTransform()->setParent(collarJoint->getTransform());
 		leftUpperArm->getTransform()->setLocalPosition(Vector3(-collarWidth, 0, 0));
-		leftUpperArm->getTransform()->setLocalRotation(Quaternion(Vector3(0, 0, 0.8f * Math::PI)));
+		leftUpperArm->getTransform()->setLocalRotation(Quaternion(Vector3(0, 0, 0.55f * Math::PI)));
 		leftUpperArm->getTransform()->name = "Left UpperArm";
 		leftUpperArm->setMaterial(mat);
 
@@ -85,6 +86,14 @@ namespace T3D {
 		head->getTransform()->setLocalPosition(Vector3(0, torsoLength + headRadius, 0));
 		head->getTransform()->name = "Head";
 		head->setMaterial(mat);
+
+		Animation *anim = new Animation(2.0);
+		addComponent(anim);
+		anim->addKey("Left ForeArm", 0, Quaternion(Vector3(0, 0, -1)), leftForeArm->getTransform()->getLocalPosition());
+		anim->addKey("Left ForeArm", 1, Quaternion(Vector3(0, 0, -2)), leftForeArm->getTransform()->getLocalPosition());
+		anim->addKey("Left ForeArm", 2, Quaternion(Vector3(0, 0, -1)), leftForeArm->getTransform()->getLocalPosition());
+		anim->loop(true);
+		anim->play();
 	}
 
 	StickFigure::~StickFigure() {
