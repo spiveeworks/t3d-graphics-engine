@@ -36,6 +36,7 @@
     <ClCompile Include="HoleInWall.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="KeyboardController.cpp" />
+    <ClCompile Include="KeyboardEditor.cpp" />
     <ClCompile Include="Lamp.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="LookAtBehaviour.cpp" />
@@ -103,6 +104,7 @@
     <ClInclude Include="HoleInWall.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="KeyboardController.h" />
+    <ClInclude Include="KeyboardEditor.h" />
     <ClInclude Include="Lamp.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="LookAtBehaviour.h" />

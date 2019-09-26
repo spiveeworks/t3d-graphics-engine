@@ -11,6 +11,7 @@
 #include "Assignment2.h"
 #include "Camera.h"
 #include "keyboardcontroller.h"
+#include "KeyboardEditor.h"
 #include "StickFigure.h"
 
 namespace T3D{
@@ -50,8 +51,9 @@ namespace T3D{
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
-		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05f, 0.05f, 0.5f, grey);
-		person->getTransform()->setParent(root);
+		std::vector<StickFigure*> *people = new std::vector<StickFigure*>;
+		people->push_back(new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05f, 0.05f, 0.5f, grey, root));
+		(*people)[0]->addComponent(new KeyboardEditor(people));
 
 		return true;
 	}

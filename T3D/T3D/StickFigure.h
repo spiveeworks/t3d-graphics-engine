@@ -6,7 +6,7 @@ namespace T3D {
 	class StickFigure : public GameObject
 	{
 	public:
-		StickFigure(T3DApplication *app, float limbLength, float limbRadius, float torsoLength, float torsoRadius, float collarWidth, float pelvisWidth, float headRadius, Material *mat);
+		StickFigure(T3DApplication *app, float limbLength, float limbRadius, float torsoLength, float torsoRadius, float collarWidth, float pelvisWidth, float headRadius, Material *mat, Transform *root);
 		~StickFigure(void);
 
 		void setPose(Vector3 position, const Poses::Pose);

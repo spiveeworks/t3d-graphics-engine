@@ -5,7 +5,7 @@
 #include "Animation.h"
 
 namespace T3D {
-	StickFigure::StickFigure(T3DApplication *app, float _limbLength, float _limbRadius, float _torsoLength, float _torsoRadius, float _collarWidth, float _pelvisWidth, float _headRadius, Material *mat) :GameObject(app) {
+	StickFigure::StickFigure(T3DApplication *app, float _limbLength, float _limbRadius, float _torsoLength, float _torsoRadius, float _collarWidth, float _pelvisWidth, float _headRadius, Material *mat, Transform *root) :GameObject(app) {
 		limbLength = _limbLength;
 		limbRadius = _limbRadius;
 		torsoLength = _torsoLength;
@@ -15,6 +15,7 @@ namespace T3D {
 		headRadius = _headRadius;
 
 		setMesh(new Capsule(torsoRadius, torsoLength, 16));
+		getTransform()->setParent(root);
 		getTransform()->name = "Stick Figure";
 		setMaterial(mat);
 
@@ -94,7 +95,7 @@ namespace T3D {
 		addComponent(anim);
 		poses.anim = anim;
 
-		poses.poses.emplace_back(Poses::WAVE[0]);
+		poses.poses.push_back(Poses::WAVE[0]);
 		poses.positions.push_back(Vector3(0, 0, 0));
 		poses.times.push_back(0);
 

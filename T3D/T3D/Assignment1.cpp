@@ -54,19 +54,18 @@ namespace T3D{
 		Material *wood = renderer->createMaterial(Renderer::PR_OPAQUE);
 		wood->setDiffuse(0.9f, 0.8f, 0.7f, 1);
 		Material *carbonfibre = renderer->createMaterial(Renderer::PR_OPAQUE);
-		carbonfibre->setDiffuse(0.2, 0.2, 0.2, 1);
+		carbonfibre->setDiffuse(0.2f, 0.2f, 0.2f, 1);
 		carbonfibre->setShininess(10);
 		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
 		CricketBat *bat = new CricketBat(this, wood, carbonfibre);
 		bat->getTransform()->setLocalPosition(Vector3(-6, 0, 0));
-		bat->getTransform()->setLocalScale(Vector3(0.1, 0.1, 0.1));
+		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bat->getTransform()->setParent(root);
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
-		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05, 0.05, 0.5, grey);
+		StickFigure *person = new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05f, 0.05f, 0.5f, grey, root);
 		person->getTransform()->setLocalPosition(Vector3(-2, 0, 0));
-		person->getTransform()->setParent(root);
 
 		Material *green = renderer->createMaterial(Renderer::PR_OPAQUE);
 		green->setDiffuse(0, 0.8f, 0, 1);
