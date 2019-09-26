@@ -37,9 +37,12 @@ namespace T3D
 
 		void addBone(std::string n);
 		void addKey(std::string n, float time, Quaternion rot, Vector3 pos);
+		void clearKeys();
 
-		void play(){ time = 0; playing = true; }
+		void play(float _time){ time = _time; playing = true; }
+		float getTime() { return time; };
 		void pause(){ playing = false; }
+		bool getPlaying() { return playing; }
 		void loop(bool loop){ looping = loop; } 
 
 		void printFrames()

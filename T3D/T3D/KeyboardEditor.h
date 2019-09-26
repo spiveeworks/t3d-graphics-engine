@@ -15,14 +15,18 @@ namespace T3D
 		virtual ~KeyboardEditor(void);
 
 		virtual void update(float dt);
-		void keyDownResolve(float dt);
-		void keyUpResolve(float dt);
-		void mouseMoveResolve();
 
 	private:
-		float keySensitivity;
+		float jointSensitivity;
+		float positionSensitivity;
 		float mouseSensitivity;
+
 		std::vector<StickFigure*> *figures;
+		unsigned figure_index = 0;
+		unsigned joint_index = 0;
+		unsigned pose_index = 0;
+		bool index_keys = false;
+		bool animated = true;
 	};
 
 }

@@ -10,15 +10,15 @@
 namespace T3D
 {
 	//min and max speeds for key and mouse sensitivity
-	#define KEY_SENSITIVITY_MIN 5
-	#define KEY_SENSITIVITY_MAX 10
-	#define MOUSE_SENSITIVITY_MIN 0.0005f;
-	#define MOUSE_SENSITIVITY_MAX 0.0010f;
+	#define JOINT_SENSITIVITY_MIN 0.1f
+	#define JOINT_SENSITIVITY_MAX 1.0f
+	#define POSITION_SENSITIVITY_MIN 1.0f
+	#define POSITION_SENSITIVITY_MAX 5.0f
 
 	KeyboardEditor::KeyboardEditor(std::vector<StickFigure*> *_figures)
 	{
-		keySensitivity = 50.0f;
-		mouseSensitivity = 0.0005f;
+		jointSensitivity = JOINT_SENSITIVITY_MIN;
+		positionSensitivity = POSITION_SENSITIVITY_MIN;
 		figures = _figures;
 	}
 
@@ -28,69 +28,115 @@ namespace T3D
 	}
 
 	void KeyboardEditor::update(float dt){
-		//resolve all of the input actions
-		keyDownResolve(dt);
-		keyUpResolve(dt);
-		mouseMoveResolve();
-		
-	}
+		bool pose_changed = false;
 
-	//Method to resolve the actions of each keyDown event
-	void KeyboardEditor::keyDownResolve(float dt)
-	{
-		Matrix4x4 m = gameObject->getTransform()->getLocalMatrix();
-		Vector3 right = Vector3(m[0][0], m[1][0], m[2][0]);
-		Vector3 up = Vector3(m[0][1], m[1][1], m[2][1]);
-		Vector3 back = Vector3(m[0][2], m[1][2], m[2][2]);
-
-		if (Input::keyDown[KEY_LEFT] || Input::keyDown[KEY_A]){
-			gameObject->getTransform()->move(-right*dt*keySensitivity);
+		if (Input::keyDown[KEY_Z] && !index_keys) {
+			int diff = Input::keyDown[KEY_LEFT_SHIFT] ? -1 : +1;
+			figure_index = (diff + figure_index + figures->size()) % figures->size();
 		}
-		if (Input::keyDown[KEY_RIGHT] || Input::keyDown[KEY_D]){
-			gameObject->getTransform()->move(right*dt*keySensitivity);
+		if (Input::keyDown[KEY_X] && !index_keys) {
+			int diff = Input::keyDown[KEY_LEFT_SHIFT] ? -1 : +1;
+			unsigned pose_num = (*figures)[figure_index]->poses.poses.size();
+			pose_index = (diff + pose_index + pose_num) % pose_num;
+			pose_changed = true;
 		}
-		if (Input::keyDown[KEY_UP] || Input::keyDown[KEY_W]){
-			gameObject->getTransform()->move(-back*dt*keySensitivity);
-		}
-		if (Input::keyDown[KEY_DOWN] || Input::keyDown[KEY_S]){
-			gameObject->getTransform()->move(back*dt*keySensitivity);
+		if (Input::keyDown[KEY_C] && !index_keys) {
+			int diff = Input::keyDown[KEY_LEFT_SHIFT] ? -1 : +1;
+			joint_index = (diff + joint_index + Poses::NUMJOINTS) % Poses::NUMJOINTS;
 		}
 
-		if (Input::keyDown[KEY_SPACE]){
-			gameObject->getTransform()->move(up*dt*keySensitivity);
-		}
-		if (Input::keyDown[KEY_LEFT_CONTROL]){
-			gameObject->getTransform()->move(-up*dt*keySensitivity);
-		}
+		StickFigure *figure = (*figures)[figure_index];
 
-		if (Input::keyDown[KEY_LEFT_SHIFT]){
-			keySensitivity = KEY_SENSITIVITY_MAX;
-			mouseSensitivity = MOUSE_SENSITIVITY_MAX;
+		if (Input::keyDown[KEY_BACKSPACE] && !index_keys) {
+			figure->poses.poses[pose_index][joint_index] = Poses::NEUTRAL[joint_index];
+			pose_changed = true;
 		}
 
-	}
-
-	//Method to resolve the actions of each keyUp event, following keyDown
-	void KeyboardEditor::keyUpResolve(float dt){
-		
-		if (!Input::keyDown[KEY_LEFT_SHIFT]){
-			keySensitivity = KEY_SENSITIVITY_MIN;
-			mouseSensitivity = MOUSE_SENSITIVITY_MIN;
+		if (Input::keyDown[KEY_RETURN] && !index_keys) {
+			animated = !animated;
+			pose_changed = true;
+			if (animated) {
+				float time = figure->poses.times[pose_index];
+				for (unsigned i = 0; i < figures->size(); i++) {
+					(*figures)[i]->startAnimation(time);
+				}
+			}
+			else {
+				for (unsigned i = 0; i < figures->size(); i++) {
+					(*figures)[i]->anim->pause();
+				}
+			}
+		}
+		else if (animated && !figure->anim->getPlaying()) {
+			animated = false;
+			pose_changed = true;
 		}
 
-	}
 
-	//Method to resolve the action of mouse movements
-	void KeyboardEditor::mouseMoveResolve(){
+		if (Input::keyDown[KEY_INSERT]) {
+			figure->poses.poses[pose_index][joint_index].x -= dt * jointSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_DELETE]) {
+			figure->poses.poses[pose_index][joint_index].x += dt * jointSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_HOME]) {
+			figure->poses.poses[pose_index][joint_index].y -= dt * jointSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_END]) {
+			figure->poses.poses[pose_index][joint_index].y += dt * jointSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_PAGEUP]) {
+			figure->poses.poses[pose_index][joint_index].z -= dt * jointSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_PAGEDOWN]) {
+			figure->poses.poses[pose_index][joint_index].z += dt * jointSensitivity;
+			pose_changed = true;
+		}
 
-		Vector3 rotation = gameObject->getTransform()->getEulerAngles();
+		if (Input::keyDown[KEY_I]) {
+			figure->poses.positions[pose_index].z -= dt * positionSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_K]) {
+			figure->poses.positions[pose_index].z += dt * positionSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_J]) {
+			figure->poses.positions[pose_index].x -= dt * positionSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_L]) {
+			figure->poses.positions[pose_index].x += dt * positionSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_N]) {
+			figure->poses.positions[pose_index].y -= dt * positionSensitivity;
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_M]) {
+			figure->poses.positions[pose_index].y += dt * positionSensitivity;
+			pose_changed = true;
+		}
 
-		rotation += Vector3(-Input::mouseY*mouseSensitivity, -Input::mouseX*mouseSensitivity, 0);
-		float eightydeg = 80 * Math::DEG2RAD;
-		if (rotation.x > eightydeg) rotation.x = eightydeg;
-		if (rotation.x < -eightydeg) rotation.x = -eightydeg;
+		if (pose_changed) {
+			if (animated) {
+				// rebuild keyframes and restart at the exact current time
+				figure->startAnimation(figure->anim->getTime());
+			} else {
+				// kind of hacky? surely StickFigure should know how to read its own poses member
+				figure->setPose(figure->poses.positions[pose_index], figure->poses.poses[pose_index]);
+			}
+		}
 
-		gameObject->getTransform()->setLocalRotation(rotation);
+		index_keys = Input::keyDown[KEY_Z] || Input::keyDown[KEY_X] || Input::keyDown[KEY_C] || Input::keyDown[KEY_BACKSPACE] || Input::keyDown[KEY_RETURN];
+
+		jointSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? JOINT_SENSITIVITY_MAX : JOINT_SENSITIVITY_MIN;
+		positionSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? POSITION_SENSITIVITY_MAX : POSITION_SENSITIVITY_MIN;
 	}
 
 }

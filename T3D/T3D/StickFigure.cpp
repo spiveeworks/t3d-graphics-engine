@@ -107,15 +107,17 @@ namespace T3D {
 		poses.positions.push_back(Vector3(0, 0, 0));
 		poses.times.push_back(2);
 
-		//startAnimation();
+		startAnimation(0);
 	}
 
-	void StickFigure::startAnimation() {
+	void StickFigure::startAnimation(float time) {
+		anim->clearKeys();
+
 		for (unsigned i = 0; i < poses.poses.size(); i++) {
 			appendPose(anim, poses.positions[i], poses.poses[i], poses.times[i]);
 		}
-		anim->loop(true);
-		anim->play();
+		anim->loop(false);
+		anim->play(time);
 	}
 
 	void StickFigure::setPose(Vector3 position, const Poses::Pose pose) {

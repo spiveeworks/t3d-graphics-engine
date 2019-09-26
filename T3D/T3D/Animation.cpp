@@ -49,6 +49,12 @@ namespace T3D
 		}
 	}
 
+	void Animation::clearKeys() {
+		for (auto each : bones) {
+			each.second->keyframes.clear();
+		}
+	}
+
 	void Animation::update(float dt){		
 		if (playing){
 			time += dt;

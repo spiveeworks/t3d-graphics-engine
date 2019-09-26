@@ -11,7 +11,7 @@ namespace T3D {
 
 		void setPose(Vector3 position, const Poses::Pose);
 		void appendPose(Animation *anim, Vector3 position, const Poses::Pose pose, float time);
-		void startAnimation();
+		void startAnimation(float time);
 
 		// unused I believe
 		float limbLength,
