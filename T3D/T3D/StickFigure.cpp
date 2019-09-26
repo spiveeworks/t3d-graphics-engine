@@ -77,6 +77,17 @@ namespace T3D {
 		head->getTransform()->name = "Head";
 		head->setMaterial(mat);
 
+		leftThigh->getTransform()->setLocalPosition(Vector3(-pelvisWidth, 0, 0));
+		leftCalf->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
+		rightThigh->getTransform()->setLocalPosition(Vector3(pelvisWidth, 0, 0));
+		rightCalf->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
+		collarJoint->getTransform()->setLocalPosition(Vector3(0, torsoLength, 0));
+		leftUpperArm->getTransform()->setLocalPosition(Vector3(-collarWidth, 0, 0));
+		leftForeArm->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
+		rightUpperArm->getTransform()->setLocalPosition(Vector3(collarWidth, 0, 0));
+		rightForeArm->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
+		head->getTransform()->setLocalPosition(Vector3(0, torsoLength + headRadius, 0));
+
 		setPose(Vector3(0, 0, 0), Poses::NEUTRAL);
 
 		anim = new Animation(2.0f);
@@ -95,7 +106,7 @@ namespace T3D {
 		poses.positions.push_back(Vector3(0, 0, 0));
 		poses.times.push_back(2);
 
-		startAnimation();
+		//startAnimation();
 	}
 
 	void StickFigure::startAnimation() {
@@ -108,16 +119,6 @@ namespace T3D {
 
 	void StickFigure::setPose(Vector3 position, const Poses::Pose pose) {
 		getTransform()->setLocalPosition(position);
-		leftThigh->getTransform()->setLocalPosition(Vector3(-pelvisWidth, 0, 0));
-		leftCalf->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
-		rightThigh->getTransform()->setLocalPosition(Vector3(pelvisWidth, 0, 0));
-		rightCalf->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
-		collarJoint->getTransform()->setLocalPosition(Vector3(0, torsoLength, 0));
-		leftUpperArm->getTransform()->setLocalPosition(Vector3(-collarWidth, 0, 0));
-		leftForeArm->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
-		rightUpperArm->getTransform()->setLocalPosition(Vector3(collarWidth, 0, 0));
-		rightForeArm->getTransform()->setLocalPosition(Vector3(0, limbLength, 0));
-		head->getTransform()->setLocalPosition(Vector3(0, torsoLength + headRadius, 0));
 
 		getTransform()->setLocalRotation(Quaternion(Math::HALF_PI * pose[Poses::PELVIS]));
 		leftThigh->getTransform()->setLocalRotation(Quaternion(Math::HALF_PI * pose[Poses::LTHIGH]));
