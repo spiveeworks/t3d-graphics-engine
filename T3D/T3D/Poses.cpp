@@ -6,7 +6,8 @@
 
 namespace T3D {
 
-	const Poses::Pose Poses::NEUTRAL = {
+	// double braces to initialize std::array for some reason
+	const Poses::Pose Poses::NEUTRAL = { {
 		{ 0, 0, 0 },
 		{ 0, 0, 1.6f },
 		{ 0, 0, 0.2f },
@@ -18,9 +19,9 @@ namespace T3D {
 		{ 0, 0, -1.6f },
 		{ 0, 0, -0.2f },
 		{ 0, 0, 0 },
-	};
+	} };
 	const Poses::Pose Poses::WAVE[2] = {
-		{
+		{ {
 			{ 0, 0, 0 },
 			{ 0, 0, 1.6f },
 			{ 0, 0, 0.2f },
@@ -32,8 +33,8 @@ namespace T3D {
 			{ 0, 0, -1.6f },
 			{ 0, 0, -0.2f },
 			{ 0, 0, 0 },
-		},
-		{
+		} },
+		{ {
 			{ 0, 0, 0 },
 			{ 0, 0, 1.6f },
 			{ 0, 0, 0.2f },
@@ -45,6 +46,6 @@ namespace T3D {
 			{ 0, 0, -1.6f },
 			{ 0, 0, -0.2f },
 			{ 0, 0, 0 },
-		},
+		} },
 	};
 }

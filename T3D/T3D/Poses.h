@@ -1,12 +1,13 @@
 #pragma once
 #include "Animation.h"
 #include <vector>
+#include <array>
 
 namespace T3D {
 	class Poses
 	{
 	public:
-		Poses(Animation* _anim) { anim = _anim; }
+		Poses() {}
 		~Poses(void) {}
 
 		enum Joint {
@@ -25,9 +26,11 @@ namespace T3D {
 		};
 		static constexpr unsigned NUMJOINTS = 11;
 
-		Animation *anim;
+		// unused
+		Animation *anim = NULL;
+
 		std::vector<Vector3> positions;
-		typedef Vector3 Pose[NUMJOINTS];
+		typedef std::array<Vector3, NUMJOINTS> Pose;
 		std::vector<Pose> poses;
 		std::vector<float> times;
 

@@ -79,11 +79,29 @@ namespace T3D {
 
 		setPose(Vector3(0, 0, 0), Poses::NEUTRAL);
 
-		Animation *anim = new Animation(2.0f);
+		anim = new Animation(2.0f);
 		addComponent(anim);
-		appendPose(anim, Vector3(0, 0, 0), Poses::WAVE[0], 0);
-		appendPose(anim, Vector3(0, 0, 0), Poses::WAVE[1], 1);
-		appendPose(anim, Vector3(0, 0, 0), Poses::WAVE[0], 2);
+		poses.anim = anim;
+
+		poses.poses.emplace_back(Poses::WAVE[0]);
+		poses.positions.push_back(Vector3(0, 0, 0));
+		poses.times.push_back(0);
+
+		poses.poses.push_back(Poses::WAVE[1]);
+		poses.positions.push_back(Vector3(0, 0, 0));
+		poses.times.push_back(1);
+
+		poses.poses.push_back(Poses::WAVE[0]);
+		poses.positions.push_back(Vector3(0, 0, 0));
+		poses.times.push_back(2);
+
+		startAnimation();
+	}
+
+	void StickFigure::startAnimation() {
+		for (unsigned i = 0; i < poses.poses.size(); i++) {
+			appendPose(anim, poses.positions[i], poses.poses[i], poses.times[i]);
+		}
 		anim->loop(true);
 		anim->play();
 	}
