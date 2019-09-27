@@ -13,7 +13,6 @@ namespace T3D {
 		void appendPose(Animation *anim, Vector3 position, const Poses::Pose pose, float time);
 		void startAnimation(float time);
 
-		// unused I believe
 		float limbLength,
 			limbRadius,
 			torsoLength,

@@ -29,9 +29,9 @@ namespace T3D {
 		// unused
 		Animation *anim = NULL;
 
-		std::vector<Vector3> positions;
 		typedef std::array<Vector3, NUMJOINTS> Pose;
 		std::vector<Pose> poses;
+		std::vector<Vector3> positions;
 		std::vector<float> times;
 
 		static const Pose NEUTRAL;

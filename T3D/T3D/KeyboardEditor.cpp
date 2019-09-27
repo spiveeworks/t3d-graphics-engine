@@ -16,11 +16,14 @@ namespace T3D
 	#define POSITION_SENSITIVITY_MIN 1.0f
 	#define POSITION_SENSITIVITY_MAX 5.0f
 
-	KeyboardEditor::KeyboardEditor(std::vector<StickFigure*> *_figures)
+	KeyboardEditor::KeyboardEditor(std::vector<StickFigure*>*_figures, T3DApplication * _app, Material *_mat, Transform *_root)
 	{
 		jointSensitivity = JOINT_SENSITIVITY_MIN;
 		positionSensitivity = POSITION_SENSITIVITY_MIN;
 		figures = _figures;
+		app = _app;
+		mat = _mat;
+		root = _root;
 	}
 
 
@@ -149,19 +152,107 @@ namespace T3D
 	}
 
 	void KeyboardEditor::savePoses() {
+		// ofstream stuff
+		char fname[100];
+		std::ios_base::openmode mode = std::ios_base::out | std::ios_base::binary | std::ios_base::trunc;
+
+		sprintf_s(fname, "Resources\\animation\\figures");
+		std::ofstream scene_o = std::ofstream(fname, mode);
+		unsigned size = figures->size();
+		scene_o.write((char*)&size, sizeof(unsigned));
+		
 		for (unsigned figure = 0; figure < figures->size(); figure++) {
+			StickFigure *figure_data = (*figures)[figure];
+			scene_o.write((char*)&figure_data->limbLength, sizeof(float));
+			scene_o.write((char*)&figure_data->limbRadius, sizeof(float));
+			scene_o.write((char*)&figure_data->torsoLength, sizeof(float));
+			scene_o.write((char*)&figure_data->torsoRadius, sizeof(float));
+			scene_o.write((char*)&figure_data->collarWidth, sizeof(float));
+			scene_o.write((char*)&figure_data->pelvisWidth, sizeof(float));
+			scene_o.write((char*)&figure_data->headRadius, sizeof(float));
+
 			Poses& poses = (*figures)[figure]->poses;
+			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);
+			std::ofstream figure_o = std::ofstream(fname, mode);
+			unsigned size = poses.poses.size();
+			figure_o.write((char*)&size, sizeof(unsigned));
+
 			for (unsigned pose = 0; pose < poses.poses.size(); pose++) {
-				char fname[100];
 				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
-				std::ofstream pose_o = std::ofstream(fname, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+				std::ofstream pose_o = std::ofstream(fname, mode);
 				pose_o.write((char*)&poses.poses[pose], sizeof(Poses::Pose));
 				pose_o.close();
+
+				figure_o.write((char*)&poses.times[pose], sizeof(float));
+				figure_o.write((char*)&poses.positions[pose], sizeof(Vector3));
 			}
+
+			figure_o.close();
 		}
+
+		scene_o.close();
 	}
 
 	void KeyboardEditor::loadPoses() {
-		printf("Attempted to load poses!\n");
+		// ifstream stuff
+		char fname[100];
+		std::ios_base::openmode mode = std::ios_base::in | std::ios_base::binary;
+
+		sprintf_s(fname, "Resources\\animation\\figures");
+		std::ifstream scene_i = std::ifstream(fname, mode);
+		if (!scene_i) {
+			printf("Failed to open file!\n");
+			return;
+		}
+		unsigned figure_num;
+		scene_i.read((char*)&figure_num, sizeof(unsigned));
+
+		for (unsigned figure = 0; figure < figures->size(); figure++) {
+			// delete (*figures)[figure]; // requires that this not be stored inside of the first figure... need to make a Scene object with all of the figures inside of it, or make KeyboardEditor an object
+		}
+		figures->clear();
+		figures->reserve(figure_num);
+
+		for (unsigned figure = 0; figure < figure_num; figure++) {
+			float limbLength,
+				limbRadius,
+				torsoLength,
+				torsoRadius,
+				collarWidth,
+				pelvisWidth,
+				headRadius;
+			scene_i.read((char*)&limbLength, sizeof(float));
+			scene_i.read((char*)&limbRadius, sizeof(float));
+			scene_i.read((char*)&torsoLength, sizeof(float));
+			scene_i.read((char*)&torsoRadius, sizeof(float));
+			scene_i.read((char*)&collarWidth, sizeof(float));
+			scene_i.read((char*)&pelvisWidth, sizeof(float));
+			scene_i.read((char*)&headRadius, sizeof(float));
+			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root));
+
+			Poses& poses = (*figures)[figure]->poses;
+			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);
+			std::ifstream figure_i = std::ifstream(fname, mode);
+			unsigned pose_num;
+			figure_i.read((char*)&pose_num, sizeof(unsigned));
+			poses.poses.resize(pose_num);
+			poses.positions.resize(pose_num);
+			poses.times.resize(pose_num);
+
+			for (unsigned pose = 0; pose < pose_num; pose++) {
+				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
+				std::ifstream pose_i = std::ifstream(fname, mode);
+
+				pose_i.read((char*)&poses.poses[pose], sizeof(Poses::Pose));
+				pose_i.close();
+
+				figure_i.read((char*)&poses.times[pose], sizeof(float));
+				figure_i.read((char*)&poses.positions[pose], sizeof(Vector3));
+			}
+
+			figure_i.close();
+		}
+
+		scene_i.close();
 	}
 }

@@ -11,7 +11,7 @@ namespace T3D
 		public Component
 	{
 	public:
-		KeyboardEditor(std::vector<StickFigure*>*);
+		KeyboardEditor(std::vector<StickFigure*>*, T3DApplication * app, Material *mat, Transform *root);
 		virtual ~KeyboardEditor(void);
 
 		virtual void update(float dt);
@@ -20,6 +20,10 @@ namespace T3D
 		void loadPoses();
 
 	private:
+		T3DApplication * app;
+		Material *mat;
+		Transform *root;
+
 		float jointSensitivity;
 		float positionSensitivity;
 		float mouseSensitivity;
