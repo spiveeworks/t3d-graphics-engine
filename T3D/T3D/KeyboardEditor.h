@@ -15,6 +15,9 @@ namespace T3D
 		virtual ~KeyboardEditor(void);
 
 		virtual void update(float dt);
+		// violates Single Responsibility Principle but modular code is only useful if it has plans to be extended
+		void savePoses();
+		void loadPoses();
 
 	private:
 		float jointSensitivity;

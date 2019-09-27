@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 
 #include "KeyboardEditor.h"
 #include "Input.h"
@@ -72,6 +73,14 @@ namespace T3D
 			pose_changed = true;
 		}
 
+		if (Input::keyDown[KEY_BACKQUOTE] && !index_keys) {
+			savePoses();
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_BACKSLASH] && !index_keys) {
+			loadPoses();
+			pose_changed = true;
+		}
 
 		if (Input::keyDown[KEY_INSERT]) {
 			figure->poses.poses[pose_index][joint_index].x -= dt * jointSensitivity;
@@ -133,10 +142,26 @@ namespace T3D
 			}
 		}
 
-		index_keys = Input::keyDown[KEY_Z] || Input::keyDown[KEY_X] || Input::keyDown[KEY_C] || Input::keyDown[KEY_BACKSPACE] || Input::keyDown[KEY_RETURN];
+		index_keys = Input::keyDown[KEY_Z] || Input::keyDown[KEY_X] || Input::keyDown[KEY_C] || Input::keyDown[KEY_BACKSPACE] || Input::keyDown[KEY_RETURN] || Input::keyDown[KEY_BACKQUOTE] || Input::keyDown[KEY_BACKSLASH];
 
 		jointSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? JOINT_SENSITIVITY_MAX : JOINT_SENSITIVITY_MIN;
 		positionSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? POSITION_SENSITIVITY_MAX : POSITION_SENSITIVITY_MIN;
 	}
 
+	void KeyboardEditor::savePoses() {
+		for (unsigned figure = 0; figure < figures->size(); figure++) {
+			Poses& poses = (*figures)[figure]->poses;
+			for (unsigned pose = 0; pose < poses.poses.size(); pose++) {
+				char fname[100];
+				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
+				std::ofstream pose_o = std::ofstream(fname, std::ios_base::out | std::ios_base::binary | std::ios_base::trunc);
+				pose_o.write((char*)&poses.poses[pose], sizeof(Poses::Pose));
+				pose_o.close();
+			}
+		}
+	}
+
+	void KeyboardEditor::loadPoses() {
+		printf("Attempted to load poses!\n");
+	}
 }
