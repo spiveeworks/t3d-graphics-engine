@@ -11,7 +11,7 @@ namespace T3D
 		public Component
 	{
 	public:
-		KeyboardEditor(std::vector<StickFigure*>*, T3DApplication * app, Material *mat, Transform *root);
+		KeyboardEditor(std::vector<StickFigure*>*_figures, T3DApplication * _app, Material *_mat, Transform *_root);
 		virtual ~KeyboardEditor(void);
 
 		virtual void update(float dt);

@@ -261,6 +261,9 @@
     <ClCompile Include="KeyboardEditor.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h">
@@ -462,6 +465,9 @@
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="KeyboardEditor.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>

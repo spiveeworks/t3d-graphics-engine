@@ -95,17 +95,9 @@ namespace T3D {
 		addComponent(anim);
 		poses.anim = anim;
 
-		poses.poses.push_back(Poses::WAVE[0]);
+		poses.poses.push_back(Poses::NEUTRAL);
 		poses.positions.push_back(Vector3(0, 0, 0));
 		poses.times.push_back(0);
-
-		poses.poses.push_back(Poses::WAVE[1]);
-		poses.positions.push_back(Vector3(0, 0, 0));
-		poses.times.push_back(1);
-
-		poses.poses.push_back(Poses::WAVE[0]);
-		poses.positions.push_back(Vector3(0, 0, 0));
-		poses.times.push_back(2);
 
 		startAnimation(0);
 	}

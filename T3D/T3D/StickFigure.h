@@ -7,7 +7,7 @@ namespace T3D {
 	{
 	public:
 		StickFigure(T3DApplication *app, float limbLength, float limbRadius, float torsoLength, float torsoRadius, float collarWidth, float pelvisWidth, float headRadius, Material *mat, Transform *root);
-		~StickFigure(void);
+		virtual ~StickFigure(void);
 
 		void setPose(Vector3 position, const Poses::Pose);
 		void appendPose(Animation *anim, Vector3 position, const Poses::Pose pose, float time);

@@ -208,7 +208,7 @@ namespace T3D
 		scene_i.read((char*)&figure_num, sizeof(unsigned));
 
 		for (unsigned figure = 0; figure < figures->size(); figure++) {
-			// delete (*figures)[figure]; // requires that this not be stored inside of the first figure... need to make a Scene object with all of the figures inside of it, or make KeyboardEditor an object
+			delete (*figures)[figure]->getTransform(); // requires that this not be stored inside one of the figures
 		}
 		figures->clear();
 		figures->reserve(figure_num);
@@ -228,7 +228,7 @@ namespace T3D
 			scene_i.read((char*)&collarWidth, sizeof(float));
 			scene_i.read((char*)&pelvisWidth, sizeof(float));
 			scene_i.read((char*)&headRadius, sizeof(float));
-			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root));
+			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root)); // causes a heap corruption....
 
 			Poses& poses = (*figures)[figure]->poses;
 			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);

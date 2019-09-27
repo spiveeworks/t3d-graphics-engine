@@ -12,7 +12,7 @@
 #include "Camera.h"
 #include "keyboardcontroller.h"
 #include "KeyboardEditor.h"
-#include "StickFigure.h"
+#include "Scene.h"
 
 namespace T3D{
 
@@ -51,9 +51,10 @@ namespace T3D{
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
-		std::vector<StickFigure*> *people = new std::vector<StickFigure*>;
-		people->push_back(new StickFigure(this, 1, 0.15f, 2, 0.2f, 0.05f, 0.05f, 0.5f, grey, root));
-		(*people)[0]->addComponent(new KeyboardEditor(people, this, grey, root)); // editor needs other things 
+		Scene*scene = new Scene(this);
+		KeyboardEditor *editor = new KeyboardEditor(&scene->figures, this, grey, root);
+		scene->addComponent(editor);
+		editor->loadPoses();
 
 		return true;
 	}
