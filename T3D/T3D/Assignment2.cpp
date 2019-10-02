@@ -52,9 +52,12 @@ namespace T3D{
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
 		Scene*scene = new Scene(this);
+
+		// do I even need Scene?
+		//std::vector<StickFigure*> *figures = new std::vector<StickFigure*>;
 		KeyboardEditor *editor = new KeyboardEditor(&scene->figures, this, grey, root);
-		scene->addComponent(editor);
 		editor->loadPoses();
+		addTask(editor);
 
 		return true;
 	}

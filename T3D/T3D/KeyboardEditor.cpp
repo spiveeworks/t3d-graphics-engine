@@ -16,7 +16,7 @@ namespace T3D
 	#define POSITION_SENSITIVITY_MIN 1.0f
 	#define POSITION_SENSITIVITY_MAX 5.0f
 
-	KeyboardEditor::KeyboardEditor(std::vector<StickFigure*>*_figures, T3DApplication * _app, Material *_mat, Transform *_root)
+	KeyboardEditor::KeyboardEditor(std::vector<StickFigure*>*_figures, T3DApplication * _app, Material *_mat, Transform *_root) : Task(_app)
 	{
 		jointSensitivity = JOINT_SENSITIVITY_MIN;
 		positionSensitivity = POSITION_SENSITIVITY_MIN;
@@ -208,7 +208,7 @@ namespace T3D
 		scene_i.read((char*)&figure_num, sizeof(unsigned));
 
 		for (unsigned figure = 0; figure < figures->size(); figure++) {
-			delete (*figures)[figure]->getTransform(); // requires that this not be stored inside one of the figures
+			//delete (*figures)[figure]->getTransform(); // requires that this not be stored inside one of the figures
 		}
 		figures->clear();
 		figures->reserve(figure_num);

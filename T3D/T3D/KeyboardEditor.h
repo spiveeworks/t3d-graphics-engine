@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.h"
+#include "Task.h"
 #include "StickFigure.h"
 #include <vector>
 
@@ -8,7 +8,7 @@ namespace T3D
 {
 
 	class KeyboardEditor :
-		public Component
+		public Task
 	{
 	public:
 		KeyboardEditor(std::vector<StickFigure*>*_figures, T3DApplication * _app, Material *_mat, Transform *_root);
@@ -20,6 +20,7 @@ namespace T3D
 		void loadPoses();
 
 	private:
+		// this stuff could be in other places, app in ancestors, mat and root in scene?
 		T3DApplication * app;
 		Material *mat;
 		Transform *root;
