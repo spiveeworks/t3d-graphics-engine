@@ -94,12 +94,6 @@ namespace T3D {
 		anim = new Animation(2.0f);
 		addComponent(anim);
 		poses.anim = anim;
-
-		poses.poses.push_back(Poses::NEUTRAL);
-		poses.positions.push_back(Vector3(0, 0, 0));
-		poses.times.push_back(0);
-
-		startAnimation(0);
 	}
 
 	void StickFigure::startAnimation(float time) {

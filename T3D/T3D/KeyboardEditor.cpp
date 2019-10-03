@@ -208,7 +208,7 @@ namespace T3D
 		scene_i.read((char*)&figure_num, sizeof(unsigned));
 
 		for (unsigned figure = 0; figure < figures->size(); figure++) {
-			//delete (*figures)[figure]->getTransform(); // requires that this not be stored inside one of the figures
+			delete (*figures)[figure]->getTransform();
 		}
 		figures->clear();
 		figures->reserve(figure_num);
@@ -249,6 +249,8 @@ namespace T3D
 				figure_i.read((char*)&poses.times[pose], sizeof(float));
 				figure_i.read((char*)&poses.positions[pose], sizeof(Vector3));
 			}
+
+			(*figures)[figure]->startAnimation(0.0f);
 
 			figure_i.close();
 		}
