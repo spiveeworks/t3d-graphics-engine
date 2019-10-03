@@ -11,7 +11,6 @@ namespace T3D {
 		~Poses(void) {}
 
 		enum Joint {
-			PELVIS, // = 0
 			LTHIGH,
 			LCALF,
 			RTHIGH,
@@ -21,10 +20,10 @@ namespace T3D {
 			LFOREARM,
 			RUPPERARM,
 			RFOREARM,
-			HEAD, // = 10
-			// NUMJOINTS = 11,
+			HEAD, // = 9
+			// NUMJOINTS = 10,
 		};
-		static constexpr unsigned NUMJOINTS = 11;
+		static constexpr unsigned NUMJOINTS = 10;
 
 		// unused
 		Animation *anim = NULL;
@@ -32,6 +31,7 @@ namespace T3D {
 		typedef std::array<Vector3, NUMJOINTS> Pose;
 		std::vector<Pose> poses;
 		std::vector<Vector3> positions;
+		std::vector<Vector3> orientations;
 		std::vector<float> times;
 
 		static const Pose NEUTRAL;

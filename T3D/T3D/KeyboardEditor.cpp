@@ -141,7 +141,7 @@ namespace T3D
 				figure->startAnimation(figure->anim->getTime());
 			} else {
 				// kind of hacky? surely StickFigure should know how to read its own poses member
-				figure->setPose(figure->poses.positions[pose_index], figure->poses.poses[pose_index]);
+				figure->setPose(figure->poses.positions[pose_index], figure->poses.orientations[pose_index], figure->poses.poses[pose_index]);
 			}
 		}
 
@@ -180,6 +180,7 @@ namespace T3D
 			for (unsigned pose = 0; pose < poses.poses.size(); pose++) {
 				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
 				std::ofstream pose_o = std::ofstream(fname, mode);
+				pose_o.write((char*)& poses.orientations[pose], sizeof(Vector3));
 				pose_o.write((char*)&poses.poses[pose], sizeof(Poses::Pose));
 				pose_o.close();
 
@@ -237,13 +238,15 @@ namespace T3D
 			figure_i.read((char*)&pose_num, sizeof(unsigned));
 			poses.poses.resize(pose_num);
 			poses.positions.resize(pose_num);
+			poses.orientations.resize(pose_num);
 			poses.times.resize(pose_num);
 
 			for (unsigned pose = 0; pose < pose_num; pose++) {
 				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
 				std::ifstream pose_i = std::ifstream(fname, mode);
 
-				pose_i.read((char*)&poses.poses[pose], sizeof(Poses::Pose));
+				pose_i.read((char*)& poses.orientations[pose], sizeof(Vector3));
+				pose_i.read((char*)& poses.poses[pose], sizeof(Poses::Pose));
 				pose_i.close();
 
 				figure_i.read((char*)&poses.times[pose], sizeof(float));
