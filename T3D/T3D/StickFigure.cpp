@@ -99,16 +99,31 @@ namespace T3D {
 	void StickFigure::setPose(Vector3 position, Vector3 orientation, const Poses::Pose pose) {
 		getTransform()->setLocalPosition(position);
 
-		getTransform()->setLocalRotation(Quaternion(Math::HALF_PI * orientation));
+		Quaternion body_conj = Quaternion(Math::HALF_PI * Poses::CONJUGATOR[Poses::HEAD]),
+			ori = Quaternion(Math::HALF_PI * orientation),
+			body_rot = body_conj * ori / body_conj;
+		getTransform()->setLocalRotation(body_rot);
 		for (unsigned i = 0; i < Poses::NUMJOINTS; i++) {
-			joints[i]->getTransform()->setLocalRotation(Quaternion(Math::HALF_PI * pose[i]));
+			Quaternion ref = Quaternion(Math::HALF_PI * Poses::REFERENCE[i]),
+				conj = Quaternion(Math::HALF_PI * Poses::CONJUGATOR[i]),
+				joint = Quaternion(Math::HALF_PI * pose[i]),
+				rot = ref * conj * joint / conj;
+
+			joints[i]->getTransform()->setLocalRotation(rot);
 		}
 	}
 
 	void StickFigure::appendPose(Animation *anim, Vector3 position, Vector3 orientation, const Poses::Pose pose, float time) {
-		anim->addKey("Stick Figure", time, Quaternion(Math::HALF_PI * orientation), position);
+		Quaternion body_conj = Quaternion(Math::HALF_PI * Poses::CONJUGATOR[Poses::HEAD]),
+			ori = Quaternion(Math::HALF_PI * orientation),
+			body_rot = body_conj * ori / body_conj;
+		anim->addKey("Stick Figure", time, body_rot, position);
 		for (unsigned i = 0; i < Poses::NUMJOINTS; i++) {
-			anim->addKey(JOINT_NAMES[i], time, Quaternion(Math::HALF_PI * pose[i]), joints[i]->getTransform()->getLocalPosition());
+			Quaternion ref = Quaternion(Math::HALF_PI * Poses::REFERENCE[i]),
+				conj = Quaternion(Math::HALF_PI * Poses::CONJUGATOR[i]),
+				joint = Quaternion(Math::HALF_PI * pose[i]),
+				rot = ref * conj * joint / conj;
+			anim->addKey(JOINT_NAMES[i], time, rot, joints[i]->getTransform()->getLocalPosition());
 		}
 	}
 }

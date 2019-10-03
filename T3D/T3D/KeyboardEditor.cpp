@@ -49,10 +49,19 @@ namespace T3D
 			joint_index = (diff + joint_index + Poses::NUMJOINTS) % Poses::NUMJOINTS;
 		}
 
+		if (Input::keyDown[KEY_BACKQUOTE] && !index_keys) {
+			savePoses();
+			pose_changed = true;
+		}
+		if (Input::keyDown[KEY_BACKSLASH] && !index_keys) {
+			loadPoses();
+			pose_changed = true;
+		}
+
 		StickFigure *figure = (*figures)[figure_index];
 
 		if (Input::keyDown[KEY_BACKSPACE] && !index_keys) {
-			figure->poses.poses[pose_index][joint_index] = Poses::NEUTRAL[joint_index];
+			figure->poses.poses[pose_index][joint_index] = Input::keyDown[KEY_LEFT_SHIFT] ? Poses::ZEROES[joint_index] : Poses::NEUTRAL[joint_index];
 			pose_changed = true;
 		}
 
@@ -73,15 +82,6 @@ namespace T3D
 		}
 		else if (animated && !figure->anim->getPlaying()) {
 			animated = false;
-			pose_changed = true;
-		}
-
-		if (Input::keyDown[KEY_BACKQUOTE] && !index_keys) {
-			savePoses();
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_BACKSLASH] && !index_keys) {
-			loadPoses();
 			pose_changed = true;
 		}
 
@@ -229,7 +229,7 @@ namespace T3D
 			scene_i.read((char*)&collarWidth, sizeof(float));
 			scene_i.read((char*)&pelvisWidth, sizeof(float));
 			scene_i.read((char*)&headRadius, sizeof(float));
-			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root)); // causes a heap corruption....
+			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root));
 
 			Poses& poses = (*figures)[figure]->poses;
 			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);
@@ -252,7 +252,6 @@ namespace T3D
 				figure_i.read((char*)&poses.times[pose], sizeof(float));
 				figure_i.read((char*)&poses.positions[pose], sizeof(Vector3));
 			}
-
 			(*figures)[figure]->startAnimation(0.0f);
 
 			figure_i.close();

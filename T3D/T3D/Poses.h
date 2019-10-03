@@ -34,7 +34,6 @@ namespace T3D {
 		std::vector<Vector3> orientations;
 		std::vector<float> times;
 
-		static const Pose NEUTRAL;
-		static const Pose WAVE[2];
+		static const Pose REFERENCE, CONJUGATOR, ZEROES, NEUTRAL;
 	};
 }
