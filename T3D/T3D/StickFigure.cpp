@@ -141,7 +141,4 @@ namespace T3D {
 		anim->addKey("Right ForeArm", time, Quaternion(Math::HALF_PI * pose[Poses::RFOREARM]), rightForeArm->getTransform()->getLocalPosition());
 		anim->addKey("Head", time, Quaternion(Math::HALF_PI * pose[Poses::HEAD]), head->getTransform()->getLocalPosition());
 	}
-
-	StickFigure::~StickFigure() {
-	}
 }

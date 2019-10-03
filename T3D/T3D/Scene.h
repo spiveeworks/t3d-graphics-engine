@@ -11,7 +11,6 @@ namespace T3D {
 			getTransform()->setParent(app->getRoot());
 			getTransform()->name = "Scene Object";
 		}
-		virtual ~Scene(void) {}
 
 		std::vector<StickFigure*> figures;
 	};
