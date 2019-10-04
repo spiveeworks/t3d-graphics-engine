@@ -180,12 +180,12 @@ namespace T3D
 			for (unsigned pose = 0; pose < poses.poses.size(); pose++) {
 				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
 				std::ofstream pose_o = std::ofstream(fname, mode);
-				pose_o.write((char*)& poses.orientations[pose], sizeof(Vector3));
 				pose_o.write((char*)&poses.poses[pose], sizeof(Poses::Pose));
 				pose_o.close();
 
 				figure_o.write((char*)&poses.times[pose], sizeof(float));
 				figure_o.write((char*)&poses.positions[pose], sizeof(Vector3));
+				figure_o.write((char*)& poses.orientations[pose], sizeof(Vector3));
 			}
 
 			figure_o.close();
@@ -245,12 +245,12 @@ namespace T3D
 				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
 				std::ifstream pose_i = std::ifstream(fname, mode);
 
-				pose_i.read((char*)& poses.orientations[pose], sizeof(Vector3));
 				pose_i.read((char*)& poses.poses[pose], sizeof(Poses::Pose));
 				pose_i.close();
 
 				figure_i.read((char*)&poses.times[pose], sizeof(float));
 				figure_i.read((char*)&poses.positions[pose], sizeof(Vector3));
+				figure_i.read((char*)& poses.orientations[pose], sizeof(Vector3));
 			}
 			(*figures)[figure]->startAnimation(0.0f);
 
