@@ -31,7 +31,7 @@ namespace T3D
 
 		std::vector<StickFigure*> *figures;
 		unsigned figure_index = 0;
-		unsigned joint_index = 0;
+		unsigned joint_index = Poses::NUMJOINTS;
 		unsigned pose_index = 0;
 		bool index_keys = false;
 		bool animated = true;

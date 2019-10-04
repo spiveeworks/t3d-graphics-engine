@@ -46,7 +46,7 @@ namespace T3D
 		}
 		if (Input::keyDown[KEY_C] && !index_keys) {
 			int diff = Input::keyDown[KEY_LEFT_SHIFT] ? -1 : +1;
-			joint_index = (diff + joint_index + Poses::NUMJOINTS) % Poses::NUMJOINTS;
+			joint_index = (diff + joint_index + Poses::NUMJOINTS + 1) % (Poses::NUMJOINTS + 1);
 		}
 
 		if (Input::keyDown[KEY_BACKQUOTE] && !index_keys) {
@@ -61,7 +61,12 @@ namespace T3D
 		StickFigure *figure = (*figures)[figure_index];
 
 		if (Input::keyDown[KEY_BACKSPACE] && !index_keys) {
-			figure->poses.poses[pose_index][joint_index] = Input::keyDown[KEY_LEFT_SHIFT] ? Poses::ZEROES[joint_index] : Poses::NEUTRAL[joint_index];
+			if (joint_index < Poses::NUMJOINTS) {
+				figure->poses.poses[pose_index][joint_index] = Input::keyDown[KEY_LEFT_SHIFT] ? Poses::ZEROES[joint_index] : Poses::NEUTRAL[joint_index];
+			}
+			else {
+				figure->poses.orientations[pose_index] = { 0, 0, 0 };
+			}
 			pose_changed = true;
 		}
 
@@ -85,29 +90,32 @@ namespace T3D
 			pose_changed = true;
 		}
 
-		if (Input::keyDown[KEY_INSERT]) {
-			figure->poses.poses[pose_index][joint_index].x -= dt * jointSensitivity;
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_DELETE]) {
-			figure->poses.poses[pose_index][joint_index].x += dt * jointSensitivity;
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_HOME]) {
-			figure->poses.poses[pose_index][joint_index].y -= dt * jointSensitivity;
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_END]) {
-			figure->poses.poses[pose_index][joint_index].y += dt * jointSensitivity;
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_PAGEUP]) {
-			figure->poses.poses[pose_index][joint_index].z -= dt * jointSensitivity;
-			pose_changed = true;
-		}
-		if (Input::keyDown[KEY_PAGEDOWN]) {
-			figure->poses.poses[pose_index][joint_index].z += dt * jointSensitivity;
-			pose_changed = true;
+		{
+			Vector3& joint = joint_index < Poses::NUMJOINTS ? figure->poses.poses[pose_index][joint_index] : figure->poses.orientations[pose_index];
+			if (Input::keyDown[KEY_INSERT]) {
+				joint.x -= dt * jointSensitivity;
+				pose_changed = true;
+			}
+			if (Input::keyDown[KEY_DELETE]) {
+				joint.x += dt * jointSensitivity;
+				pose_changed = true;
+			}
+			if (Input::keyDown[KEY_HOME]) {
+				joint.y -= dt * jointSensitivity;
+				pose_changed = true;
+			}
+			if (Input::keyDown[KEY_END]) {
+				joint.y += dt * jointSensitivity;
+				pose_changed = true;
+			}
+			if (Input::keyDown[KEY_PAGEUP]) {
+				joint.z -= dt * jointSensitivity;
+				pose_changed = true;
+			}
+			if (Input::keyDown[KEY_PAGEDOWN]) {
+				joint.z += dt * jointSensitivity;
+				pose_changed = true;
+			}
 		}
 
 		if (Input::keyDown[KEY_I]) {
