@@ -180,13 +180,13 @@ namespace T3D
 			scene_o.write((char*)&figure_data->headRadius, sizeof(float));
 
 			Poses& poses = (*figures)[figure]->poses;
-			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);
+			sprintf_s(fname, "Resources\\animation\\figure %02d - blocking", figure);
 			std::ofstream figure_o = std::ofstream(fname, mode);
 			unsigned size = poses.poses.size();
 			figure_o.write((char*)&size, sizeof(unsigned));
 
 			for (unsigned pose = 0; pose < poses.poses.size(); pose++) {
-				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
+				sprintf_s(fname, "Resources\\animation\\figure %02d - pose %02d", figure, pose);
 				std::ofstream pose_o = std::ofstream(fname, mode);
 				pose_o.write((char*)&poses.poses[pose], sizeof(Poses::Pose));
 				pose_o.close();
@@ -240,7 +240,7 @@ namespace T3D
 			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root));
 
 			Poses& poses = (*figures)[figure]->poses;
-			sprintf_s(fname, "Resources\\animation\\figure %d - blocking", figure);
+			sprintf_s(fname, "Resources\\animation\\figure %02d - blocking", figure);
 			std::ifstream figure_i = std::ifstream(fname, mode);
 			unsigned pose_num;
 			figure_i.read((char*)&pose_num, sizeof(unsigned));
@@ -250,7 +250,7 @@ namespace T3D
 			poses.times.resize(pose_num);
 
 			for (unsigned pose = 0; pose < pose_num; pose++) {
-				sprintf_s(fname, "Resources\\animation\\figure %d - pose %d", figure, pose);
+				sprintf_s(fname, "Resources\\animation\\figure %02d - pose %02d", figure, pose);
 				std::ifstream pose_i = std::ifstream(fname, mode);
 
 				pose_i.read((char*)& poses.poses[pose], sizeof(Poses::Pose));
