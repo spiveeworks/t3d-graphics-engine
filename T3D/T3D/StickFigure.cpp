@@ -81,7 +81,7 @@ namespace T3D {
 
 		setPose(Vector3(0, 0, 0), Vector3(0, 0, 0), Poses::NEUTRAL);
 
-		anim = new Animation(2.0f);
+		anim = new Animation(30);
 		addComponent(anim);
 		poses.anim = anim;
 	}
