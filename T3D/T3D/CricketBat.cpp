@@ -70,17 +70,22 @@ namespace T3D {
 		std::vector<Vector3> bladeProfile;
 		SweepPath bladesp;
 		{
+			// top - left
 			bladeProfile.push_back(Vector3(0.0f, 0.13f, 0.0f));
 			bladeProfile.push_back(Vector3(-0.2f, 0.08f, 0.0f));
 			bladeProfile.push_back(Vector3(-0.5f, 0.1f, 0.0f));
+			// left
 			bladeProfile.push_back(Vector3(-0.5f, 0.1f, 0.0f));
 			bladeProfile.push_back(Vector3(-0.5f, -0.1f, 0.0f));
+			// bottom
 			bladeProfile.push_back(Vector3(-0.5f, -0.1f, 0.0f));
 			bladeProfile.push_back(Vector3(-0.2f, -0.11f, 0.0f));
 			bladeProfile.push_back(Vector3(0.2f, -0.11f, 0.0f));
 			bladeProfile.push_back(Vector3(0.5f, -0.1f, 0.0f));
+			// right
 			bladeProfile.push_back(Vector3(0.5f, -0.1f, 0.0f));
 			bladeProfile.push_back(Vector3(0.5f, 0.1f, 0.0f));
+			// top - right
 			bladeProfile.push_back(Vector3(0.5f, 0.1f, 0.0f));
 			bladeProfile.push_back(Vector3(0.2f, 0.08f, 0.0f));
 			bladeProfile.push_back(Vector3(0.0f, 0.13f, 0.0f));
@@ -116,7 +121,35 @@ namespace T3D {
 			bladesp.addTransform(t);
 		}
 		blade = new GameObject(app);
-		blade->setMesh(new Sweep(bladeProfile, bladesp, false));
+		{
+			Mesh* mesh = new Sweep(bladeProfile, bladesp, false);
+			float t = 0;
+			for (unsigned int i = 0; i < bladesp.size(); i++) {
+				for (unsigned int j = 0; j < bladeProfile.size(); j++)
+				{
+					int vpos = i * bladeProfile.size() + j;
+					Vector3 vert = mesh->getVertex(vpos);
+					vert.x *= 316.0f / 741.0f / 7.0f;
+					vert.x += 1.2f;
+					vert.z += 0.5f;
+
+					// top
+					if (j < 3 || j >= 11) {
+						mesh->setUV(vpos, 1.0f - vert.x, 1.0f - vert.z);
+					}
+					// sides
+					else if (j < 5 || j >= 9) {
+						mesh->setUV(vpos, 0, 0);
+					}
+					// bottom
+					else {
+						mesh->setUV(vpos, 1.0f - vert.x, vert.z);
+					}
+				}
+			}
+
+			blade->setMesh(mesh);
+		}
 		blade->getTransform()->setParent(getTransform());
 		blade->getTransform()->setLocalPosition(Vector3(0, 0.1, 0));
 		blade->getTransform()->setLocalScale(Vector3(1.0f, 7.0f, 7.0f));

@@ -13,6 +13,7 @@
 #include "keyboardcontroller.h"
 #include "KeyboardEditor.h"
 #include "Scene.h"
+#include "CricketBat.h"
 
 namespace T3D{
 
@@ -58,6 +59,21 @@ namespace T3D{
 		KeyboardEditor *editor = new KeyboardEditor(&scene->figures, this, grey, root);
 		editor->loadPoses();
 		addTask(editor);
+
+
+		Texture* linux = new Texture("Resources/linux.png", true, true);
+		renderer->loadTexture(linux);
+		Material* bladeMat = renderer->createMaterial(Renderer::PR_OPAQUE);
+		bladeMat->setTexture(linux);
+		Material* carbonfibre = renderer->createMaterial(Renderer::PR_OPAQUE);
+		carbonfibre->setDiffuse(0.2f, 0.2f, 0.2f, 1);
+		carbonfibre->setShininess(10);
+		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
+		GameObject* bat = new CricketBat(this, bladeMat, carbonfibre);
+		bat->getTransform()->setLocalPosition(Vector3(-6, 0, 0));
+		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
+		bat->getTransform()->setParent(root);
+
 
 		return true;
 	}
