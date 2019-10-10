@@ -61,6 +61,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderTest.cpp" />
+    <ClCompile Include="SnowMaterial.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="SoundTestTask.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderTest.h" />
+    <ClInclude Include="SnowMaterial.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SoundTestTask.h" />

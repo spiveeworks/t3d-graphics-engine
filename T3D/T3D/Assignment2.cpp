@@ -14,6 +14,8 @@
 #include "KeyboardEditor.h"
 #include "Scene.h"
 #include "CricketBat.h"
+#include "Pyramid.h"
+#include "SnowMaterial.h"
 
 namespace T3D{
 
@@ -74,6 +76,18 @@ namespace T3D{
 		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bat->getTransform()->setParent(root);
 
+		Material* snow = renderer->createMaterial(Renderer::PR_OPAQUE);
+		GLShader *snowShader = new GLShader("Resources/snowVert.shader", "Resources/snowFrag.shader");
+		snowShader->compileShader();
+		snow->setShader(snowShader);
+		snow->setDiffuse(0.4f, 0.2f, 0.0f, 1.0f);
+		for (int i = 0; i < 5; i++) {
+			GameObject *pyramid = new GameObject(this);
+			pyramid->setMesh(new Pyramid(10, 10));
+			pyramid->setMaterial(snow);
+			pyramid->getTransform()->setLocalPosition(Vector3(10 * i, 4  * i - 10, 0));
+			pyramid->getTransform()->setParent(root);
+		}
 
 		return true;
 	}
