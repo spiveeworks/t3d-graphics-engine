@@ -61,7 +61,7 @@ namespace T3D{
 		addTask(editor);
 
 
-		Texture* linux = new Texture("Resources/linux.png", true, true);
+		Texture* linux = new Texture("Resources/linuxatlas.png", true, true);
 		renderer->loadTexture(linux);
 		Material* bladeMat = renderer->createMaterial(Renderer::PR_OPAQUE);
 		bladeMat->setTexture(linux);

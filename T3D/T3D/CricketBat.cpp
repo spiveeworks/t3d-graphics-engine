@@ -123,28 +123,29 @@ namespace T3D {
 		blade = new GameObject(app);
 		{
 			Mesh* mesh = new Sweep(bladeProfile, bladesp, false);
-			float t = 0;
 			for (unsigned int i = 0; i < bladesp.size(); i++) {
 				for (unsigned int j = 0; j < bladeProfile.size(); j++)
 				{
 					int vpos = i * bladeProfile.size() + j;
 					Vector3 vert = mesh->getVertex(vpos);
-					vert.x *= 316.0f / 741.0f / 7.0f;
-					vert.x += 1.2f;
 					vert.z += 0.5f;
 
+					float s, t;
 					// top
 					if (j < 3 || j >= 11) {
-						mesh->setUV(vpos, 1.0f - vert.x, 1.0f - vert.z);
+						s = vert.x * 316.0f / 741.0f / 7.0f + 1.2f;
+						t = vert.z / 2;
 					}
 					// sides
 					else if (j < 5 || j >= 9) {
-						mesh->setUV(vpos, 0, 0);
+						s = t = 0;
 					}
 					// bottom
 					else {
-						mesh->setUV(vpos, 1.0f - vert.x, vert.z);
+						s = vert.x * 316.0f / 741.0f / 7.0f + 1.2f;
+						t = 0.5f + vert.z / 2;
 					}
+					mesh->setUV(vpos, s, t);
 				}
 			}
 
