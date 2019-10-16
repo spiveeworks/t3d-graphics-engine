@@ -72,21 +72,25 @@ namespace T3D{
 		carbonfibre->setShininess(10);
 		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
 		GameObject* bat = new CricketBat(this, bladeMat, carbonfibre);
-		bat->getTransform()->setLocalPosition(Vector3(-6, 0, 0));
-		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
-		bat->getTransform()->setParent(root);
 
-		Material* snow = renderer->createMaterial(Renderer::PR_OPAQUE);
-		GLShader *snowShader = new GLShader("Resources/snowVert.shader", "Resources/snowFrag.shader");
-		snowShader->compileShader();
-		snow->setShader(snowShader);
-		snow->setDiffuse(0.4f, 0.2f, 0.0f, 1.0f);
-		for (int i = 0; i < 5; i++) {
-			GameObject *pyramid = new GameObject(this);
-			pyramid->setMesh(new Pyramid(10, 10));
-			pyramid->setMaterial(snow);
-			pyramid->getTransform()->setLocalPosition(Vector3(10 * i, 4  * i - 10, 0));
-			pyramid->getTransform()->setParent(root);
+		bat->getTransform()->setLocalPosition(Vector3(-0.6, 1, 0));
+		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
+		bat->getTransform()->setLocalRotation(Vector3(-Math::HALF_PI, 0, 0));
+		bat->getTransform()->setParent(scene->figures[0]->joints[Poses::RFOREARM]->getTransform());
+
+		if (false) {
+			Material* snow = renderer->createMaterial(Renderer::PR_OPAQUE);
+			GLShader *snowShader = new GLShader("Resources/snowVert.shader", "Resources/snowFrag.shader");
+			snowShader->compileShader();
+			snow->setShader(snowShader);
+			snow->setDiffuse(0.4f, 0.2f, 0.0f, 1.0f);
+			for (int i = 0; i < 5; i++) {
+				GameObject *pyramid = new GameObject(this);
+				pyramid->setMesh(new Pyramid(10, 10));
+				pyramid->setMaterial(snow);
+				pyramid->getTransform()->setLocalPosition(Vector3(10 * i, 4 * i - 10, 0));
+				pyramid->getTransform()->setParent(root);
+			}
 		}
 
 		return true;
