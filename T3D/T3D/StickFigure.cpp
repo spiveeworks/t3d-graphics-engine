@@ -18,7 +18,7 @@ namespace T3D {
 		"Head"
 	};
 
-	StickFigure::StickFigure(T3DApplication *app, float _limbLength, float _limbRadius, float _torsoLength, float _torsoRadius, float _collarWidth, float _pelvisWidth, float _headRadius, Material *mat, Transform *root) :GameObject(app) {
+	StickFigure::StickFigure(T3DApplication *app, Material *mat, Transform *root, float _limbLength, float _limbRadius, float _torsoLength, float _torsoRadius, float _collarWidth, float _pelvisWidth, float _headRadius) :GameObject(app) {
 		limbLength = _limbLength;
 		limbRadius = _limbRadius;
 		torsoLength = _torsoLength;

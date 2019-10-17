@@ -203,6 +203,37 @@ namespace T3D
 	}
 
 	void KeyboardEditor::loadPoses() {
+		figures->clear();
+
+		StickFigure *first = new StickFigure(app, mat, root);
+		StickFigure *second = new StickFigure(app, mat, root);
+
+		figures->push_back(first);
+		figures->push_back(second);
+
+		first->poses.poses.push_back(Poses::NEUTRAL);
+		first->poses.times.push_back(0.0f);
+		first->poses.orientations.push_back(Vector3(0, 0, 0));
+		first->poses.positions.push_back(Vector3(0, 0, 0));
+		first->poses.poses.push_back(Poses::NEUTRAL);
+		first->poses.times.push_back(30.0f);
+		first->poses.orientations.push_back(Vector3(0, 0, 0));
+		first->poses.positions.push_back(Vector3(0, 0, 0));
+
+		second->poses.poses.push_back(Poses::NEUTRAL);
+		second->poses.times.push_back(0.0f);
+		second->poses.orientations.push_back(Vector3(0, 0, 0));
+		second->poses.positions.push_back(Vector3(0, 0, 20));
+		second->poses.poses.push_back(Poses::NEUTRAL);
+		second->poses.times.push_back(30.0f);
+		second->poses.orientations.push_back(Vector3(0, 0, 0));
+		second->poses.positions.push_back(Vector3(0, 0, 10));
+
+		first->startAnimation(0.0f);
+		second->startAnimation(0.0f);
+	}
+	/*
+	void KeyboardEditor::loadPoses() {
 		// ifstream stuff
 		char fname[100];
 		std::ios_base::openmode mode = std::ios_base::in | std::ios_base::binary;
@@ -266,5 +297,5 @@ namespace T3D
 		}
 
 		scene_i.close();
-	}
+	}*/
 }
