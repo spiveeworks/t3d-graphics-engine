@@ -205,32 +205,99 @@ namespace T3D
 	void KeyboardEditor::loadPoses() {
 		figures->clear();
 
-		StickFigure *first = new StickFigure(app, mat, root);
-		StickFigure *second = new StickFigure(app, mat, root);
+		StickFigure *batter = new StickFigure(app, mat, root);
+		StickFigure *bowler = new StickFigure(app, mat, root);
 
-		figures->push_back(first);
-		figures->push_back(second);
+		figures->push_back(batter);
+		figures->push_back(bowler);
 
-		first->poses.poses.push_back(Poses::NEUTRAL);
-		first->poses.times.push_back(0.0f);
-		first->poses.orientations.push_back(Vector3(0, 0, 0));
-		first->poses.positions.push_back(Vector3(0, 0, 0));
-		first->poses.poses.push_back(Poses::NEUTRAL);
-		first->poses.times.push_back(30.0f);
-		first->poses.orientations.push_back(Vector3(0, 0, 0));
-		first->poses.positions.push_back(Vector3(0, 0, 0));
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(0.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
 
-		second->poses.poses.push_back(Poses::NEUTRAL);
-		second->poses.times.push_back(0.0f);
-		second->poses.orientations.push_back(Vector3(0, 0, 0));
-		second->poses.positions.push_back(Vector3(0, 0, 20));
-		second->poses.poses.push_back(Poses::NEUTRAL);
-		second->poses.times.push_back(30.0f);
-		second->poses.orientations.push_back(Vector3(0, 0, 0));
-		second->poses.positions.push_back(Vector3(0, 0, 10));
+		// run up
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(0.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(5, 0, 70));
 
-		first->startAnimation(0.0f);
-		second->startAnimation(0.0f);
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(4.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(5, 0, 57));
+
+		// action
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(8.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(5, 0, 25));
+
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(9.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(7, 0, 19));
+
+		// get a run
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(8.5f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(11.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 20));
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(13.5f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+
+		// start running for ball
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(9.5f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(7, 0, 19));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(12.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(7, 0, -5));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(16.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(-30, 0, -30));
+
+		// second run
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(16.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 20));
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(18.5f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+
+		// get ball back
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(20.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(0, 0, -5));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		// walk back to bowl again
+		bowler->poses.times.push_back(22.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(5, 0, -4));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(30.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+		bowler->poses.positions.push_back(Vector3(5, 0, 34));
+
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(30.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+
+		batter->startAnimation(0.0f);
+		bowler->startAnimation(0.0f);
 	}
 	/*
 	void KeyboardEditor::loadPoses() {
