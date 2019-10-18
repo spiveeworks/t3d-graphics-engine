@@ -275,56 +275,6 @@ namespace T3D
 	}
 
 	void KeyboardEditor::loadPoses() {
-
-		for (StickFigure* figure : *figures) {
-			delete figure->getTransform();
-		}
-		figures->clear();
-
-		Poses::Pose run[2];
-		run[0] = load_pose("Resources\\animation\\run 1");
-		run[1] = load_pose("Resources\\animation\\run 2");
-
-		Poses::Pose touchdown = load_pose("Resources\\animation\\touchdown");
-
-		Poses::Pose bat[3];
-		bat[0] = load_pose("Resources\\animation\\bat 1");
-		bat[1] = load_pose("Resources\\animation\\bat 2");
-		bat[2] = load_pose("Resources\\animation\\bat 3");
-
-		StickFigure *batter = new StickFigure(app, mat, root);
-		StickFigure *bowler = new StickFigure(app, mat, root);
-
-		figures->push_back(batter);
-		figures->push_back(bowler);
-
-		for (int i = 0; i < 3; i++) {
-			batter->poses.poses.push_back(bat[i]);
-			batter->poses.times.push_back(0.3f * i);
-			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
-			batter->poses.positions.push_back(Vector3(0, 0, 0));
-		}
-		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 0.9f, 5, batter->poses);
-
-		bowler->poses.poses.push_back(Poses::NEUTRAL);
-		bowler->poses.times.push_back(0.0f);
-		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
-		bowler->poses.positions.push_back(Vector3(-4, 0, -4));
-		bowler->poses.poses.push_back(touchdown);
-		bowler->poses.times.push_back(1.0f);
-		bowler->poses.orientations.push_back(Vector3(0, 0.65f, 0.5f));
-		bowler->poses.positions.push_back(Vector3(-3.8, -0.6f, -3.8));
-		bowler->poses.poses.push_back(Poses::NEUTRAL);
-		bowler->poses.times.push_back(2.0f);
-		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
-		bowler->poses.positions.push_back(Vector3(-4, 0, -4));
-
-		batter->startAnimation(0.0f);
-		bowler->startAnimation(0.0f);
-	}
-	
-	/*
-	void KeyboardEditor::loadPoses() {
 		for (StickFigure* figure : *figures) {
 			delete figure->getTransform();
 		}
@@ -341,6 +291,11 @@ namespace T3D
 		bowl[4] = load_pose("Resources\\animation\\bowl 5");
 		bowl[5] = load_pose("Resources\\animation\\bowl 6");
 		bowl[6] = load_pose("Resources\\animation\\bowl 7");
+		Poses::Pose touchdown = load_pose("Resources\\animation\\touchdown");
+		Poses::Pose bat[3];
+		bat[0] = load_pose("Resources\\animation\\bat 1");
+		bat[1] = load_pose("Resources\\animation\\bat 2");
+		bat[2] = load_pose("Resources\\animation\\bat 3");
 
 		StickFigure *batter = new StickFigure(app, mat, root);
 		StickFigure *bowler = new StickFigure(app, mat, root);
@@ -348,22 +303,25 @@ namespace T3D
 		figures->push_back(batter);
 		figures->push_back(bowler);
 
-		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.poses.push_back(bat[0]);
 		batter->poses.times.push_back(0.0f);
-		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.orientations.push_back(Vector3(0, 0, 1));
 		batter->poses.positions.push_back(Vector3(0, 0, 0));
 
 		// run and bowl
-		append_run_poses(run, Vector3(5, 0, 70), Vector3(5, 0, 57), 0, 4, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, 67), Vector3(5, 0, 57), 0, 4, bowler->poses);
 		append_run_poses(run, Vector3(5, 0, 57), Vector3(5, 0, 41), 4, 7, bowler->poses);
 		append_bowl_poses(run, bowl, Vector3(5, 0, 41), Vector3(5, 0, 29), 7, 9, bowler->poses);
 
-		// get a run
-		batter->poses.poses.push_back(Poses::NEUTRAL);
-		batter->poses.times.push_back(8.0f);
-		batter->poses.orientations.push_back(Vector3(0, 0, 2));
-		batter->poses.positions.push_back(Vector3(0, 0, 0));
-		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 8.5f, 11.0f, batter->poses);
+
+		// hit and run
+		for (int i = 0; i < 3; i++) {
+			batter->poses.poses.push_back(bat[i]);
+			batter->poses.times.push_back(8.25f + 0.25f * i); // middle frame happens at exactly 8.5s, where it hits ball
+			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
+			batter->poses.positions.push_back(Vector3(0, 0, 0));
+		}
+		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 9.0f, 11.0f, batter->poses);
 		append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), 11.0f, 13.5f, batter->poses);
 		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 13.5f, 16.0f, batter->poses);
 		append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), 16.0f, 18.5f, batter->poses);
@@ -374,11 +332,19 @@ namespace T3D
 
 
 		// start running for ball
-		append_run_poses(run, Vector3(5, 0, 29), Vector3(5, 0, -5), 9, 12, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, -5), Vector3(-30, 0, -30), 12, 16, bowler->poses);
-		append_run_poses(run, Vector3(-30, 0, -30), Vector3(0, 0, -5), 16, 20, bowler->poses);
-		append_run_poses(run, Vector3(0, 0, -5), Vector3(5, 0, -4), 20, 22, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, -4), Vector3(5, 0, 34), 22, 32, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, 29), Vector3(5, 0, -5), 9, 15, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, -5), Vector3(-20, 0, -20), 15, 20, bowler->poses);
+		bowler->poses.poses.push_back(touchdown);
+		bowler->poses.times.push_back(20.3f);
+		bowler->poses.orientations.push_back(Vector3(0, 0.65f, 0.5f));
+		bowler->poses.positions.push_back(Vector3(0.2f - 20, -0.6f, 0.2f - 20));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(20.6f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
+		bowler->poses.positions.push_back(Vector3(-20, 0, -20));
+		append_run_poses(run, Vector3(-20, 0, -20), Vector3(0, 0, -5), 21, 27, bowler->poses);
+		append_run_poses(run, Vector3(0, 0, -5), Vector3(5, 0, -4), 27, 29, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, -4), Vector3(5, 0, 34), 29, 40, bowler->poses);
 
 		batter->startAnimation(0.0f);
 		bowler->startAnimation(0.0f);
