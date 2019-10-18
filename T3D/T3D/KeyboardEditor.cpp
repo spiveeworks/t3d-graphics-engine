@@ -209,61 +209,64 @@ namespace T3D
 		scene_o.close();
 	}
 
-	void append_run_poses(Poses::Pose run[2], Vector3 from, Vector3 to, float start_time, float end_time, Poses &poses) {
-		Vector3 velocity = (to - from) / (end_time - start_time);
-		float speed = velocity.length();
-		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(velocity.x, velocity.z) / Math::HALF_PI);
-		for (int i = 0; (float)i / speed < end_time - start_time; i++) {
+	float append_run_poses(Poses::Pose run[2], Vector3 from, Vector3 to, float start_time, float speed, Poses &poses) {
+		Vector3 direction = to - from;
+		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(direction.x, direction.z) / Math::HALF_PI);
+		float total_distance = direction.length();
+		direction *= 1.0f / total_distance;
+		for (int i = 0; i < total_distance; i++) {
 			Poses::Pose pose = run[i % 2];
 			if (i / 2 % 2) {
 				pose = Poses::reflect(pose);
 			}
 			poses.poses.push_back(pose);
-			float pos = (float)i + (i % 2 ? 0.2f : 0);
-			float time = pos / speed;
-			poses.times.push_back(start_time + time);
+			float distance = (float)i + (i % 2 ? 0.2f : 0);
+			poses.times.push_back(start_time + distance / speed);
 			poses.orientations.push_back(orientation);
-			poses.positions.push_back(from + time * velocity);
+			poses.positions.push_back(from + distance * direction);
 		}
+		return start_time + total_distance / speed; // does not actually add a frame at this time, so continue exactly from here.
 	}
 
 	// the timing and pacing on this one is very different to run
 	// this procedure won't actually get you close to the end location unless you manually pick it right
 	// simply moves 11.2 units in the direction of the end location
-	void append_bowl_poses(Poses::Pose run[2], Poses::Pose bowl[7], Vector3 from, Vector3 to, float start_time, float end_time, Poses &poses) {
-		Vector3 velocity = (to - from) / (end_time - start_time);
-		velocity.normalise();
-		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(velocity.x, velocity.z) / Math::HALF_PI);
+	float append_bowl_poses(Poses::Pose run[2], Poses::Pose bowl[7], Vector3 from, Vector3 to, float start_time, float speed, Poses &poses) {
+		Vector3 direction = to - from;
+		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(direction.x, direction.z) / Math::HALF_PI);
+		float total_distance = direction.length();
+		direction *= 1.0f / total_distance;
 		for (int i = 0; i < 12; i++) {
 			Poses::Pose pose;
-			float pos;
+			float distance;
 			if (3 <= i && i - 3 < 7) {
 				pose = bowl[i - 3];
-				pos = (float)i + (i % 2 ? 0.2f : 0);
+				distance = (float)i + (i % 2 ? 0.2f : 0);
 			}
 			else {
 				pose = run[i % 2];
-				pos = (float)i + (i % 2 ? 0.2f : 0);
+				distance = (float)i + (i % 2 ? 0.2f : 0);
 				if (i / 2 % 2) {
 					pose = Poses::reflect(pose);
 				}
 			}
 			poses.poses.push_back(pose);
-			float time = end_time - start_time;
-			if (i < 7) {
-				time *= pos / 16.0f;
+			float time = distance;
+			if (i >= 7) {
+				time -= 7.2f;
+				time *= 2.0f; // move at half speed for last 3rd
+				time += 7.2f;
 			}
-			else {
-				time *= (7.2f + (pos - 7.2f) * 2.0f) / 16.0f; // move at half speed after the bowl
-			}
+			time /= speed;
 			poses.times.push_back(start_time + time);
 			if (i - 3 == 6) {
 				poses.orientations.push_back(orientation + Vector3(0, 0.3f, 0.5f));
 			} else {
 				poses.orientations.push_back(orientation);
 			}
-			poses.positions.push_back(from + pos * velocity);
+			poses.positions.push_back(from + distance * direction);
 		}
+		return start_time + 16.0f / speed;
 	}
 	
 	Poses::Pose load_pose(char *fname) {
@@ -308,43 +311,48 @@ namespace T3D
 		batter->poses.orientations.push_back(Vector3(0, 0, 1));
 		batter->poses.positions.push_back(Vector3(0, 0, 0));
 
+		float time = 0.0f;
+		float speed = 6.0f;
 		// run and bowl
-		append_run_poses(run, Vector3(5, 0, 67), Vector3(5, 0, 57), 0, 4, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, 57), Vector3(5, 0, 41), 4, 7, bowler->poses);
-		append_bowl_poses(run, bowl, Vector3(5, 0, 41), Vector3(5, 0, 29), 7, 9, bowler->poses);
-
-
-		// hit and run
-		for (int i = 0; i < 3; i++) {
-			batter->poses.poses.push_back(bat[i]);
-			batter->poses.times.push_back(8.25f + 0.25f * i); // middle frame happens at exactly 8.5s, where it hits ball
-			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
-			batter->poses.positions.push_back(Vector3(0, 0, 0));
-		}
-		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 9.0f, 11.0f, batter->poses);
-		append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), 11.0f, 13.5f, batter->poses);
-		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 13.5f, 16.0f, batter->poses);
-		append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), 16.0f, 18.5f, batter->poses);
-		batter->poses.poses.push_back(Poses::NEUTRAL);
-		batter->poses.times.push_back(19.0f);
-		batter->poses.orientations.push_back(Vector3(0, 0, 2));
-		batter->poses.positions.push_back(Vector3(0, 0, 0));
+		time = append_run_poses(run, Vector3(5, 0, 67), Vector3(5, 0, 57), time, 2.5f, bowler->poses);
+		time = append_run_poses(run, Vector3(5, 0, 57), Vector3(5, 0, 41), time, speed, bowler->poses);
+		time = append_bowl_poses(run, bowl, Vector3(5, 0, 41), Vector3(5, 0, 29), time, speed, bowler->poses);
 
 
 		// start running for ball
-		append_run_poses(run, Vector3(5, 0, 29), Vector3(5, 0, -5), 9, 15, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, -5), Vector3(-20, 0, -20), 15, 20, bowler->poses);
+		time = append_run_poses(run, Vector3(5, 0, 29), Vector3(5, 0, -5), time, speed, bowler->poses);
+		time = append_run_poses(run, Vector3(5, 0, -5), Vector3(-20, 0, -20), time, speed, bowler->poses);
 		bowler->poses.poses.push_back(touchdown);
-		bowler->poses.times.push_back(20.3f);
+		bowler->poses.times.push_back(time + 0.3f);
 		bowler->poses.orientations.push_back(Vector3(0, 0.65f, 0.5f));
 		bowler->poses.positions.push_back(Vector3(0.2f - 20, -0.6f, 0.2f - 20));
 		bowler->poses.poses.push_back(Poses::NEUTRAL);
-		bowler->poses.times.push_back(20.6f);
+		bowler->poses.times.push_back(time + 0.6f);
 		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
 		bowler->poses.positions.push_back(Vector3(-20, 0, -20));
-		append_run_poses(run, Vector3(-20, 0, -20), Vector3(0, 0, -5), 21, 27, bowler->poses);
-		append_run_poses(run, Vector3(0, 0, -5), Vector3(5, 0, -4), 27, 29, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, -4), Vector3(5, 0, 34), 29, 40, bowler->poses);
+		time = append_run_poses(run, Vector3(-20, 0, -20), Vector3(0, 0, -5), time + 1, speed, bowler->poses);
+		time = append_run_poses(run, Vector3(0, 0, -5), Vector3(5, 0, -4), time, speed, bowler->poses);
+		time = append_run_poses(run, Vector3(5, 0, -4), Vector3(5, 0, 34), time, speed, bowler->poses);
+
+		printf("Total time: %f\n", time);
+
+		time = 8.5f; // time of contact with ball
+		// hit and run
+		for (int i = 0; i < 3; i++) {
+			batter->poses.poses.push_back(bat[i]);
+			batter->poses.times.push_back(time + 0.25f * (i - 1));
+			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
+			batter->poses.positions.push_back(Vector3(0, 0, 0));
+		}
+		time = append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), time + 0.5f, speed, batter->poses);
+		time = append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), time, speed, batter->poses);
+		time = append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), time, speed, batter->poses);
+		time = append_run_poses(run, Vector3(0, 0, 20), Vector3(0, 0, 0), time, speed, batter->poses);
+		batter->poses.poses.push_back(bat[0]);
+		batter->poses.times.push_back(time + 0.5f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+
 
 		batter->startAnimation(0.0f);
 		bowler->startAnimation(0.0f);
