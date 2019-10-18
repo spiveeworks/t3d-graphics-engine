@@ -73,7 +73,7 @@ namespace T3D{
 		carbonfibre->setSpecular(0.1f, 0.1f, 0.1f, 1.0f);
 		GameObject* bat = new CricketBat(this, bladeMat, carbonfibre);
 
-		bat->getTransform()->setLocalPosition(Vector3(-0.6, 1, 0));
+		bat->getTransform()->setLocalPosition(Vector3(-0.25f, 1, 0));
 		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bat->getTransform()->setLocalRotation(Vector3(-Math::HALF_PI, 0, 0));
 		bat->getTransform()->setParent(scene->figures[0]->joints[Poses::RFOREARM]->getTransform());

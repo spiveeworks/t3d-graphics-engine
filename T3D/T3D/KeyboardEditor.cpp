@@ -287,16 +287,24 @@ namespace T3D
 
 		Poses::Pose touchdown = load_pose("Resources\\animation\\touchdown");
 
+		Poses::Pose bat[3];
+		bat[0] = load_pose("Resources\\animation\\bat 1");
+		bat[1] = load_pose("Resources\\animation\\bat 2");
+		bat[2] = load_pose("Resources\\animation\\bat 3");
+
 		StickFigure *batter = new StickFigure(app, mat, root);
 		StickFigure *bowler = new StickFigure(app, mat, root);
 
 		figures->push_back(batter);
 		figures->push_back(bowler);
 
-		batter->poses.poses.push_back(Poses::NEUTRAL);
-		batter->poses.times.push_back(0.0f);
-		batter->poses.orientations.push_back(Vector3(0, 0, 1));
-		batter->poses.positions.push_back(Vector3(0, 0, 0));
+		for (int i = 0; i < 3; i++) {
+			batter->poses.poses.push_back(bat[i]);
+			batter->poses.times.push_back(i);
+			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
+			batter->poses.positions.push_back(Vector3(0, 0, 0));
+		}
+		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 2.3f, 5, batter->poses);
 
 		bowler->poses.poses.push_back(Poses::NEUTRAL);
 		bowler->poses.times.push_back(0.0f);
