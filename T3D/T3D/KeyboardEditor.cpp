@@ -226,6 +226,45 @@ namespace T3D
 			poses.positions.push_back(from + time * velocity);
 		}
 	}
+
+	// the timing and pacing on this one is very different to run
+	// this procedure won't actually get you close to the end location unless you manually pick it right
+	// simply moves 11.2 units in the direction of the end location
+	void append_bowl_poses(Poses::Pose run[2], Poses::Pose bowl[7], Vector3 from, Vector3 to, float start_time, float end_time, Poses &poses) {
+		Vector3 velocity = (to - from) / (end_time - start_time);
+		velocity.normalise();
+		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(velocity.x, velocity.z) / Math::HALF_PI);
+		for (int i = 0; i < 12; i++) {
+			Poses::Pose pose;
+			float pos;
+			if (3 <= i && i - 3 < 7) {
+				pose = bowl[i - 3];
+				pos = (float)i + (i % 2 ? 0.2f : 0);
+			}
+			else {
+				pose = run[i % 2];
+				pos = (float)i + (i % 2 ? 0.2f : 0);
+				if (i / 2 % 2) {
+					pose = Poses::reflect(pose);
+				}
+			}
+			poses.poses.push_back(pose);
+			float time = end_time - start_time;
+			if (i < 7) {
+				time *= pos / 16.0f;
+			}
+			else {
+				time *= (7.2f + (pos - 7.2f) * 2.0f) / 16.0f; // move at half speed after the bowl
+			}
+			poses.times.push_back(start_time + time);
+			if (i - 3 == 6) {
+				poses.orientations.push_back(orientation + Vector3(0, 0.3f, 0.5f));
+			} else {
+				poses.orientations.push_back(orientation);
+			}
+			poses.positions.push_back(from + pos * velocity);
+		}
+	}
 	
 	Poses::Pose load_pose(char *fname) {
 		Poses::Pose result;
@@ -262,55 +301,12 @@ namespace T3D
 		batter->poses.poses.push_back(Poses::NEUTRAL);
 		batter->poses.times.push_back(0.0f);
 		batter->poses.orientations.push_back(Vector3(0, 0, 2));
-		batter->poses.positions.push_back(Vector3(0, 10, 0));
-
-		for (int i = 0; i < 28; i++) {
-			if (3 <= i && i - 3 < 7) {
-				bowler->poses.poses.push_back(bowl[i - 3]);
-			}
-			else {
-				bowler->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
-			}
-			bowler->poses.times.push_back(i);
-			if (i - 3 == 6) {
-				bowler->poses.orientations.push_back(Vector3(0, 0.3f, 2.5f));
-			}
-			else {
-				bowler->poses.orientations.push_back(Vector3(0, 0, 2));
-			}
-			bowler->poses.positions.push_back(Vector3(0, 0, 0));
-		}
-
-		batter->startAnimation(0.0f);
-		bowler->startAnimation(0.0f);
-	}
-
-	/*
-	void KeyboardEditor::loadPoses() {
-		for (StickFigure* figure : *figures) {
-			delete figure->getTransform();
-		}
-		figures->clear();
-
-		Poses::Pose run[2];
-		run[0] = load_pose("Resources\\animation\\run 1");
-		run[1] = load_pose("Resources\\animation\\run 2");
-
-		StickFigure *batter = new StickFigure(app, mat, root);
-		StickFigure *bowler = new StickFigure(app, mat, root);
-
-		figures->push_back(batter);
-		figures->push_back(bowler);
-
-		batter->poses.poses.push_back(Poses::NEUTRAL);
-		batter->poses.times.push_back(0.0f);
-		batter->poses.orientations.push_back(Vector3(0, 0, 2));
 		batter->poses.positions.push_back(Vector3(0, 0, 0));
 
 		// run and bowl
 		append_run_poses(run, Vector3(5, 0, 70), Vector3(5, 0, 57), 0, 4, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, 57), Vector3(5, 0, 25), 4, 8, bowler->poses);
-		append_run_poses(run, Vector3(5, 0, 25), Vector3(7, 0, 19), 8, 9, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, 57), Vector3(5, 0, 41), 4, 7, bowler->poses);
+		append_bowl_poses(run, bowl, Vector3(5, 0, 41), Vector3(5, 0, 29), 7, 9, bowler->poses);
 
 		// get a run
 		batter->poses.poses.push_back(Poses::NEUTRAL);
@@ -328,8 +324,8 @@ namespace T3D
 
 
 		// start running for ball
-		append_run_poses(run, Vector3(7, 0, 19), Vector3(7, 0, -5), 9.5, 12, bowler->poses);
-		append_run_poses(run, Vector3(7, 0, -5), Vector3(-30, 0, -30), 12, 16, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, 29), Vector3(5, 0, -5), 9, 12, bowler->poses);
+		append_run_poses(run, Vector3(5, 0, -5), Vector3(-30, 0, -30), 12, 16, bowler->poses);
 		append_run_poses(run, Vector3(-30, 0, -30), Vector3(0, 0, -5), 16, 20, bowler->poses);
 		append_run_poses(run, Vector3(0, 0, -5), Vector3(5, 0, -4), 20, 22, bowler->poses);
 		append_run_poses(run, Vector3(5, 0, -4), Vector3(5, 0, 34), 22, 32, bowler->poses);
