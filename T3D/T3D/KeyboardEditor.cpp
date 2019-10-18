@@ -201,7 +201,30 @@ namespace T3D
 
 		scene_o.close();
 	}
+	void KeyboardEditor::loadPoses() {
+		figures->clear();
 
+		StickFigure *batter = new StickFigure(app, mat, root);
+		StickFigure *bowler = new StickFigure(app, mat, root);
+
+		figures->push_back(batter);
+		figures->push_back(bowler);
+		for (int i = 0; i <= 30; i++) {
+			batter->poses.poses.push_back(Poses::NEUTRAL);
+			batter->poses.times.push_back(i);
+			batter->poses.orientations.push_back(Vector3(0, 0, 2));
+			batter->poses.positions.push_back(Vector3(0, 0, 0));
+
+			bowler->poses.poses.push_back(Poses::NEUTRAL);
+			bowler->poses.times.push_back(i);
+			bowler->poses.orientations.push_back(Vector3(0, 0, 0));
+			bowler->poses.positions.push_back(Vector3(0, 0, 2));
+		}
+
+		batter->startAnimation(0.0f);
+		bowler->startAnimation(0.0f);
+	}
+	/*
 	void KeyboardEditor::loadPoses() {
 		figures->clear();
 
@@ -299,7 +322,7 @@ namespace T3D
 		batter->startAnimation(0.0f);
 		bowler->startAnimation(0.0f);
 	}
-	/*
+	
 	void KeyboardEditor::loadPoses() {
 		// ifstream stuff
 		char fname[100];
