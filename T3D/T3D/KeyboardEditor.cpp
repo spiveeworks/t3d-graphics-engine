@@ -208,6 +208,24 @@ namespace T3D
 
 		scene_o.close();
 	}
+
+	void append_run_poses(Poses::Pose run[2], Vector3 from, Vector3 to, float start_time, float end_time, Poses &poses) {
+		Vector3 velocity = (to - from) / (end_time - start_time);
+		float speed = velocity.length();
+		Vector3 orientation = Vector3(0, 0, (float)2 + atan2(velocity.x, velocity.z) / Math::HALF_PI);
+		for (int i = 0; (float)i / speed < end_time - start_time; i++) {
+			Poses::Pose pose = run[i % 2];
+			if (i / 2 % 2) {
+				pose = Poses::reflect(pose);
+			}
+			poses.poses.push_back(pose);
+			float pos = (float)i + (i % 2 ? 0.2f : 0);
+			float time = pos / speed;
+			poses.times.push_back(start_time + time);
+			poses.orientations.push_back(orientation);
+			poses.positions.push_back(from + time * velocity);
+		}
+	}
 	
 	void KeyboardEditor::loadPoses() {
 		figures->clear();
@@ -227,21 +245,12 @@ namespace T3D
 		figures->push_back(batter);
 		figures->push_back(bowler);
 
-		float run_speed = 3.0f;
-		for (int i = 0; (float) i / run_speed <= 30.0; i++) {
-			batter->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
-			float pos = (float)i + (i % 2 ? 0.2f : 0);
-			float time = pos / run_speed;
-			batter->poses.times.push_back(time);
-			batter->poses.orientations.push_back(Vector3(0, 0, 2));
-			batter->poses.positions.push_back(Vector3(0, 0, pos));
-		}
-		for (int i = 0; i <= 30; i++) {
-			bowler->poses.poses.push_back(Poses::NEUTRAL);
-			bowler->poses.times.push_back(i);
-			bowler->poses.orientations.push_back(Vector3(0, 0, 0));
-			bowler->poses.positions.push_back(Vector3(0, 0, 2));
-		}
+		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 10), 0, 5, batter->poses);
+		append_run_poses(run, Vector3(0, 0, 10), Vector3(10, 0, 10), 5, 10, batter->poses);
+		append_run_poses(run, Vector3(10, 0, 10), Vector3(10, 0, 0), 10, 15, batter->poses);
+		append_run_poses(run, Vector3(10, 0, 0), Vector3(0, 0, 0), 15, 20, batter->poses);
+
+		append_run_poses(run, Vector3(2, 0, 0), Vector3(-150, 0, 0), 0, 20, bowler->poses);
 
 		batter->startAnimation(0.0f);
 		bowler->startAnimation(0.0f);
