@@ -85,6 +85,13 @@ namespace T3D
 				}
 			}
 		}
+
+		if (Input::keyDown[KEY_R] && !index_keys) {
+			pose_changed = true;
+			Poses::Pose &it = (*figures)[figure_index]->poses.poses[pose_index];
+			it = Poses::reflect(it);
+		}
+
 		else if (animated && !figure->anim->getPlaying()) {
 			animated = false;
 			pose_changed = true;
@@ -153,7 +160,7 @@ namespace T3D
 			}
 		}
 
-		index_keys = Input::keyDown[KEY_Z] || Input::keyDown[KEY_X] || Input::keyDown[KEY_C] || Input::keyDown[KEY_BACKSPACE] || Input::keyDown[KEY_RETURN] || Input::keyDown[KEY_BACKQUOTE] || Input::keyDown[KEY_BACKSLASH];
+		index_keys = Input::keyDown[KEY_Z] || Input::keyDown[KEY_X] || Input::keyDown[KEY_C] || Input::keyDown[KEY_BACKSPACE] || Input::keyDown[KEY_RETURN] || Input::keyDown[KEY_BACKQUOTE] || Input::keyDown[KEY_BACKSLASH] || Input::keyDown[KEY_R];
 
 		jointSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? JOINT_SENSITIVITY_MAX : JOINT_SENSITIVITY_MIN;
 		positionSensitivity = Input::keyDown[KEY_LEFT_SHIFT] ? POSITION_SENSITIVITY_MAX : POSITION_SENSITIVITY_MIN;

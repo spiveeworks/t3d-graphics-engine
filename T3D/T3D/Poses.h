@@ -35,5 +35,22 @@ namespace T3D {
 		std::vector<float> times;
 
 		static const Pose REFERENCE, CONJUGATOR, ZEROES, NEUTRAL;
+
+		static Pose reflect(Pose base) {
+			Pose result;
+			result[LTHIGH] = base[RTHIGH];
+			result[LCALF] = base[RCALF];
+			result[RTHIGH] = base[LTHIGH];
+			result[RCALF] = base[LCALF];
+			result[COLLAR] = base[COLLAR];
+			result[COLLAR].z *= -1;
+			result[LUPPERARM] = base[RUPPERARM];
+			result[LFOREARM] = base[RFOREARM];
+			result[RUPPERARM] = base[LUPPERARM];
+			result[RFOREARM] = base[LFOREARM];
+			result[HEAD] = base[HEAD];
+			result[HEAD].z *= -1;
+			return result;
+		}
 	};
 }
