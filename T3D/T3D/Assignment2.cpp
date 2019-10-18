@@ -7,6 +7,8 @@
 #include "CricketBat.h"
 #include "Pyramid.h"
 #include "SnowMaterial.h"
+#include "Sphere.h"
+#include "BallController.h"
 
 namespace T3D{
 
@@ -67,6 +69,12 @@ namespace T3D{
 		bat->getTransform()->setLocalScale(Vector3(0.1f, 0.1f, 0.1f));
 		bat->getTransform()->setLocalRotation(Vector3(-Math::HALF_PI, 0, 0));
 		bat->getTransform()->setParent(scene->figures[0]->joints[Poses::RFOREARM]->getTransform());
+
+		GameObject *ball = new GameObject(this);
+		ball->setMesh(new Sphere(0.3f));
+		ball->getTransform()->setParent(root);
+		ball->setMaterial(grey);
+		ball->addComponent(new BallController(scene->figures[1], root));
 
 		if (false) {
 			camObj->addComponent(new KeyboardController());

@@ -1,4 +1,3 @@
-#include <iostream>
 
 #include "TimingCamera.h"
 #include "Vector3.h"

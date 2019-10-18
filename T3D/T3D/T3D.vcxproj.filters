@@ -270,6 +270,9 @@
     <ClCompile Include="TimingCamera.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
+    <ClCompile Include="BallController.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h">
@@ -480,6 +483,9 @@
       <Filter>Header Files\Material</Filter>
     </ClInclude>
     <ClInclude Include="TimingCamera.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="BallController.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
