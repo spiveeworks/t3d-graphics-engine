@@ -65,7 +65,7 @@ namespace T3D {
 		joints[Poses::RFOREARM]->getTransform()->setParent(joints[Poses::RUPPERARM]->getTransform());
 
 		joints[Poses::HEAD]->setMesh(new Sphere(headRadius, 16));
-		// planning on fight poses, in which a stable joints[Poses::HEAD] position should look best
+		// head is detached from collar so that head position stays stable - an artificial way of making figures look like they are experience and agile.
 		joints[Poses::HEAD]->getTransform()->setParent(getTransform());
 
 		joints[Poses::LTHIGH]->getTransform()->setLocalPosition(Vector3(-pelvisWidth, 0, 0));

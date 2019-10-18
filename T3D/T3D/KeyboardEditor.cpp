@@ -208,20 +208,35 @@ namespace T3D
 
 		scene_o.close();
 	}
+	
 	void KeyboardEditor::loadPoses() {
 		figures->clear();
+
+		Poses::Pose run[2];
+		for (int i = 0; i < 2; i++) {
+			char fname[50]; // 'run 1' only needs 26 chars including \0
+			sprintf_s(fname, "Resources\\animation\\run %d", i + 1);
+			std::ifstream pose_i = std::ifstream(fname, std::ios_base::in | std::ios_base::binary);
+			pose_i.read((char*)& run[i], sizeof(Poses::Pose));
+			pose_i.close();
+		}
 
 		StickFigure *batter = new StickFigure(app, mat, root);
 		StickFigure *bowler = new StickFigure(app, mat, root);
 
 		figures->push_back(batter);
 		figures->push_back(bowler);
-		for (int i = 0; i <= 30; i++) {
-			batter->poses.poses.push_back(Poses::NEUTRAL);
-			batter->poses.times.push_back(i);
-			batter->poses.orientations.push_back(Vector3(0, 0, 2));
-			batter->poses.positions.push_back(Vector3(0, 0, 0));
 
+		float run_speed = 3.0f;
+		for (int i = 0; (float) i / run_speed <= 30.0; i++) {
+			batter->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
+			float pos = (float)i + (i % 2 ? 0.2f : 0);
+			float time = pos / run_speed;
+			batter->poses.times.push_back(time);
+			batter->poses.orientations.push_back(Vector3(0, 0, 2));
+			batter->poses.positions.push_back(Vector3(0, 0, pos));
+		}
+		for (int i = 0; i <= 30; i++) {
 			bowler->poses.poses.push_back(Poses::NEUTRAL);
 			bowler->poses.times.push_back(i);
 			bowler->poses.orientations.push_back(Vector3(0, 0, 0));
@@ -329,7 +344,7 @@ namespace T3D
 		batter->startAnimation(0.0f);
 		bowler->startAnimation(0.0f);
 	}
-	
+	/*
 	void KeyboardEditor::loadPoses() {
 		// ifstream stuff
 		char fname[100];
@@ -365,7 +380,7 @@ namespace T3D
 			scene_i.read((char*)&collarWidth, sizeof(float));
 			scene_i.read((char*)&pelvisWidth, sizeof(float));
 			scene_i.read((char*)&headRadius, sizeof(float));
-			figures->push_back(new StickFigure(app, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius, mat, root));
+			figures->push_back(new StickFigure(app, mat, root, limbLength, limbRadius, torsoLength, torsoRadius, collarWidth, pelvisWidth, headRadius));
 
 			Poses& poses = (*figures)[figure]->poses;
 			sprintf_s(fname, "Resources\\animation\\figure %02d - blocking", figure);
@@ -394,5 +409,5 @@ namespace T3D
 		}
 
 		scene_i.close();
-	}*/
+	}/**/
 }
