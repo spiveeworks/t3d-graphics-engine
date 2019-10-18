@@ -300,11 +300,11 @@ namespace T3D
 
 		for (int i = 0; i < 3; i++) {
 			batter->poses.poses.push_back(bat[i]);
-			batter->poses.times.push_back(i);
+			batter->poses.times.push_back(0.3f * i);
 			batter->poses.orientations.push_back(Vector3(0, 0, 1.0f + 0.5f * i));
 			batter->poses.positions.push_back(Vector3(0, 0, 0));
 		}
-		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 2.3f, 5, batter->poses);
+		append_run_poses(run, Vector3(0, 0, 0), Vector3(0, 0, 20), 0.9f, 5, batter->poses);
 
 		bowler->poses.poses.push_back(Poses::NEUTRAL);
 		bowler->poses.times.push_back(0.0f);
