@@ -273,7 +273,49 @@ namespace T3D
 		pose_i.close();
 		return result;
 	}
+
+	void KeyboardEditor::loadPoses() {
+
+		for (StickFigure* figure : *figures) {
+			delete figure->getTransform();
+		}
+		figures->clear();
+
+		Poses::Pose run[2];
+		run[0] = load_pose("Resources\\animation\\run 1");
+		run[1] = load_pose("Resources\\animation\\run 2");
+
+		Poses::Pose touchdown = load_pose("Resources\\animation\\touchdown");
+
+		StickFigure *batter = new StickFigure(app, mat, root);
+		StickFigure *bowler = new StickFigure(app, mat, root);
+
+		figures->push_back(batter);
+		figures->push_back(bowler);
+
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(0.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 1));
+		batter->poses.positions.push_back(Vector3(0, 0, 0));
+
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(0.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
+		bowler->poses.positions.push_back(Vector3(-4, 0, -4));
+		bowler->poses.poses.push_back(touchdown);
+		bowler->poses.times.push_back(1.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0.65f, 0.5f));
+		bowler->poses.positions.push_back(Vector3(-3.8, -0.6f, -3.8));
+		bowler->poses.poses.push_back(Poses::NEUTRAL);
+		bowler->poses.times.push_back(2.0f);
+		bowler->poses.orientations.push_back(Vector3(0, 0, 0.5f));
+		bowler->poses.positions.push_back(Vector3(-4, 0, -4));
+
+		batter->startAnimation(0.0f);
+		bowler->startAnimation(0.0f);
+	}
 	
+	/*
 	void KeyboardEditor::loadPoses() {
 		for (StickFigure* figure : *figures) {
 			delete figure->getTransform();

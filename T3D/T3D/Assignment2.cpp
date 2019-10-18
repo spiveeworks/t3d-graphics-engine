@@ -47,7 +47,7 @@ namespace T3D{
 		//This camera is super fast... you have been warned
 		GameObject *camObj = new GameObject(this);
 		renderer->camera = new Camera(Camera::PERSPECTIVE, 0.1f, 500.0f, 45.0f, 1.6f);
-		camObj->getTransform()->setLocalPosition(Vector3(0, 4, 75));
+		camObj->getTransform()->setLocalPosition(Vector3(0, 4, 3));
 		camObj->setCamera(renderer->camera);
 		camObj->getTransform()->setParent(root);
 		camObj->addComponent(new KeyboardController());
