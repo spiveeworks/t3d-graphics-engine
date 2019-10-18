@@ -267,6 +267,9 @@
     <ClCompile Include="SnowMaterial.cpp">
       <Filter>Source Files\Material</Filter>
     </ClCompile>
+    <ClCompile Include="TimingCamera.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mesh.h">
@@ -475,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="SnowMaterial.h">
       <Filter>Header Files\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="TimingCamera.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

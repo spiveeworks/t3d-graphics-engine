@@ -75,6 +75,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TerrainFollower.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="TimingCamera.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Tutorial1.cpp" />
     <ClCompile Include="Tutorial3.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TerrainFollower.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="TimingCamera.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Tutorial1.h" />
     <ClInclude Include="Tutorial3.h" />

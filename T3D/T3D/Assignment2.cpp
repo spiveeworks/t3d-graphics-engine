@@ -1,16 +1,7 @@
-// =========================================================================================
-// KXG363 - Advanced Games Programming
-// =========================================================================================
-//
-// Author: Robert Ollington
-//
-// Tutorial1.cpp
-//
-// Base application for tutorial 1.  Used in conjunction with DrawTask, a task for drawing onto a 2D texture.
-
 #include "Assignment2.h"
 #include "Camera.h"
 #include "keyboardcontroller.h"
+#include "TimingCamera.h"
 #include "KeyboardEditor.h"
 #include "Scene.h"
 #include "CricketBat.h"
@@ -50,7 +41,6 @@ namespace T3D{
 		camObj->getTransform()->setLocalPosition(Vector3(0, 4, 75));
 		camObj->setCamera(renderer->camera);
 		camObj->getTransform()->setParent(root);
-		camObj->addComponent(new KeyboardController());
 
 		Material *grey = renderer->createMaterial(Renderer::PR_OPAQUE);
 		grey->setDiffuse(0.8f, 0.8f, 0.8f, 1);
@@ -79,6 +69,8 @@ namespace T3D{
 		bat->getTransform()->setParent(scene->figures[0]->joints[Poses::RFOREARM]->getTransform());
 
 		if (false) {
+			camObj->addComponent(new KeyboardController());
+
 			Material* snow = renderer->createMaterial(Renderer::PR_OPAQUE);
 			GLShader *snowShader = new GLShader("Resources/snowVert.shader", "Resources/snowFrag.shader");
 			snowShader->compileShader();
@@ -91,6 +83,9 @@ namespace T3D{
 				pyramid->getTransform()->setLocalPosition(Vector3(10 * i, 4 * i - 10, 0));
 				pyramid->getTransform()->setParent(root);
 			}
+		}
+		else {
+			camObj->addComponent(new TimingCamera);
 		}
 
 		return true;
