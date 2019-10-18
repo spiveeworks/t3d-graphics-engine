@@ -234,7 +234,7 @@ namespace T3D
 		pose_i.close();
 		return result;
 	}
-
+	
 	void KeyboardEditor::loadPoses() {
 		for (StickFigure* figure : *figures) {
 			delete figure->getTransform();
@@ -244,6 +244,14 @@ namespace T3D
 		Poses::Pose run[2];
 		run[0] = load_pose("Resources\\animation\\run 1");
 		run[1] = load_pose("Resources\\animation\\run 2");
+		Poses::Pose bowl[7];
+		bowl[0] = load_pose("Resources\\animation\\bowl 1");
+		bowl[1] = load_pose("Resources\\animation\\bowl 2");
+		bowl[2] = load_pose("Resources\\animation\\bowl 3");
+		bowl[3] = load_pose("Resources\\animation\\bowl 4");
+		bowl[4] = load_pose("Resources\\animation\\bowl 5");
+		bowl[5] = load_pose("Resources\\animation\\bowl 6");
+		bowl[6] = load_pose("Resources\\animation\\bowl 7");
 
 		StickFigure *batter = new StickFigure(app, mat, root);
 		StickFigure *bowler = new StickFigure(app, mat, root);
@@ -257,9 +265,19 @@ namespace T3D
 		batter->poses.positions.push_back(Vector3(0, 10, 0));
 
 		for (int i = 0; i < 28; i++) {
-			bowler->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
+			if (3 <= i && i - 3 < 7) {
+				bowler->poses.poses.push_back(bowl[i - 3]);
+			}
+			else {
+				bowler->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
+			}
 			bowler->poses.times.push_back(i);
-			bowler->poses.orientations.push_back(Vector3(0, 0, 2));
+			if (i - 3 == 6) {
+				bowler->poses.orientations.push_back(Vector3(0, 0.3f, 2.5f));
+			}
+			else {
+				bowler->poses.orientations.push_back(Vector3(0, 0, 2));
+			}
 			bowler->poses.positions.push_back(Vector3(0, 0, 0));
 		}
 
