@@ -235,7 +235,39 @@ namespace T3D
 		return result;
 	}
 
+	void KeyboardEditor::loadPoses() {
+		for (StickFigure* figure : *figures) {
+			delete figure->getTransform();
+		}
+		figures->clear();
 
+		Poses::Pose run[2];
+		run[0] = load_pose("Resources\\animation\\run 1");
+		run[1] = load_pose("Resources\\animation\\run 2");
+
+		StickFigure *batter = new StickFigure(app, mat, root);
+		StickFigure *bowler = new StickFigure(app, mat, root);
+
+		figures->push_back(batter);
+		figures->push_back(bowler);
+
+		batter->poses.poses.push_back(Poses::NEUTRAL);
+		batter->poses.times.push_back(0.0f);
+		batter->poses.orientations.push_back(Vector3(0, 0, 2));
+		batter->poses.positions.push_back(Vector3(0, 10, 0));
+
+		for (int i = 0; i < 28; i++) {
+			bowler->poses.poses.push_back(i / 2 % 2 ? Poses::reflect(run[i % 2]) : run[i % 2]);
+			bowler->poses.times.push_back(i);
+			bowler->poses.orientations.push_back(Vector3(0, 0, 2));
+			bowler->poses.positions.push_back(Vector3(0, 0, 0));
+		}
+
+		batter->startAnimation(0.0f);
+		bowler->startAnimation(0.0f);
+	}
+
+	/*
 	void KeyboardEditor::loadPoses() {
 		for (StickFigure* figure : *figures) {
 			delete figure->getTransform();
